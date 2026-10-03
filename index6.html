@@ -1,0 +1,3082 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Greeny — Toko Tanaman</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        --page: #e6ebe3;
+        --bg: #f3f5f0;
+        --surface: #ffffff;
+        --surface2: #eaefe7;
+        --ink: #1e2a22;
+        --muted: #66736b;
+        --line: #dce3d9;
+        --brand: #5b7f62;
+        --brand-ink: #ffffff;
+        --brand-soft: #dde8da;
+        --heart: #c0576b;
+        --warn: #b7791f;
+        --ok: #3f7a4c;
+        --imgbg: #e8ede5;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --page: #0c100d;
+          --bg: #121814;
+          --surface: #1b241e;
+          --surface2: #243028;
+          --ink: #e8eee9;
+          --muted: #9aa89f;
+          --line: #2d3a31;
+          --brand: #7fa886;
+          --brand-ink: #0f1a13;
+          --brand-soft: #26372b;
+          --heart: #e07a8f;
+          --warn: #e0b060;
+          --ok: #7fc38e;
+        }
+      }
+      :root[data-theme="dark"] {
+        --page: #0c100d;
+        --bg: #121814;
+        --surface: #1b241e;
+        --surface2: #243028;
+        --ink: #e8eee9;
+        --muted: #9aa89f;
+        --line: #2d3a31;
+        --brand: #7fa886;
+        --brand-ink: #0f1a13;
+        --brand-soft: #26372b;
+        --heart: #e07a8f;
+        --warn: #e0b060;
+        --ok: #7fc38e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        height: 100%;
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        height: 100%;
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family:
+          "Plus Jakarta Sans",
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        font-size: 14px;
+        line-height: 1.45;
+        -webkit-font-smoothing: antialiased;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        text-align: inherit;
+      }
+      input {
+        font: inherit;
+        color: inherit;
+      }
+      :focus-visible {
+        outline: 2px solid var(--brand);
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
+      #app {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .view {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 1264px;
+        margin: 0 auto;
+        padding: 0 16px 28px;
+      }
+      .wrap.narrow {
+        max-width: 640px;
+      }
+      /* header */
+      .hd {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 0 10px;
+        position: sticky;
+        top: 0;
+        background: var(--bg);
+        z-index: 5;
+        gap: 8px;
+      }
+      .hd h1 {
+        font-size: 17px;
+        font-weight: 700;
+        margin: 0;
+        flex: 1;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .logo svg {
+        color: var(--brand);
+      }
+      .hi {
+        display: flex;
+        gap: 4px;
+      }
+      .ib {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+      .ib:hover {
+        background: var(--surface2);
+      }
+      .badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        min-width: 17px;
+        height: 17px;
+        border-radius: 9px;
+        background: var(--brand);
+        color: var(--brand-ink);
+        font-size: 10px;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        padding: 0 4px;
+      }
+      h2 {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+      }
+      .sec {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin: 22px 0 10px;
+      }
+      .link {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .link:hover {
+        color: var(--brand);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      /* hero */
+      .hero {
+        border-radius: 18px;
+        background: var(--brand-soft);
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        overflow: hidden;
+        min-height: 150px;
+      }
+      .hero .t {
+        padding: 16px 0 16px 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+      }
+      .hero h3 {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.1;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .hero p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .hero .a {
+        background: var(--imgbg);
+      }
+      .hero .a svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .sbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0 12px;
+        height: 44px;
+        margin-top: 12px;
+        color: var(--muted);
+      }
+      .sbox input {
+        border: 0;
+        background: none;
+        flex: 1;
+        outline: 0;
+        min-width: 0;
+        height: 100%;
+      }
+      .sbox:focus-within {
+        border-color: var(--brand);
+      }
+      /* categories */
+      .cats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .cat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 8px 4px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+      .cat .cim {
+        width: 46px;
+        height: 46px;
+        border-radius: 10px;
+        background: var(--imgbg);
+        overflow: hidden;
+      }
+      .cat svg.pl {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .cat:hover {
+        border-color: var(--brand);
+      }
+      /* cards */
+      .hs {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        margin: 0 -16px;
+        padding: 0 16px 4px;
+        scrollbar-width: none;
+      }
+      .mini {
+        flex: 0 0 112px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      .mini .pimg {
+        aspect-ratio: 1;
+      }
+      .mini .pb {
+        padding: 8px 9px 10px;
+      }
+      .mini .pn {
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .mini .pp {
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+      .pl.ph {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .pimg {
+        position: relative;
+        background: var(--imgbg);
+        overflow: hidden;
+      }
+      .pimg svg.pl {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .pc {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+      }
+      .pc:hover {
+        border-color: var(--brand);
+      }
+      .pc .pimg {
+        aspect-ratio: 1/1.05;
+      }
+      .pc .pb {
+        padding: 10px 12px 12px;
+      }
+      .pn {
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .pp {
+        font-weight: 700;
+        font-size: 13px;
+        margin-top: 2px;
+      }
+      .at {
+        margin-top: 8px;
+        display: grid;
+        gap: 5px;
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+      .at div {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .at svg {
+        color: var(--brand);
+        flex: none;
+      }
+      .hb {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.92);
+        color: #44514a;
+        display: grid;
+        place-items: center;
+      }
+      .hb.on {
+        color: var(--heart);
+      }
+      /* list rows */
+      .row {
+        display: flex;
+        gap: 12px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 10px;
+        align-items: center;
+        cursor: pointer;
+        margin-bottom: 10px;
+        width: 100%;
+      }
+      .row:hover {
+        border-color: var(--brand);
+      }
+      .row .pimg {
+        width: 76px;
+        height: 84px;
+        border-radius: 12px;
+        flex: none;
+      }
+      .row .in {
+        flex: 1;
+        min-width: 0;
+      }
+      .row .at {
+        margin-top: 4px;
+        gap: 2px;
+        font-size: 11px;
+      }
+      .match {
+        display: inline-block;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--brand);
+        background: var(--brand-soft);
+        border-radius: 99px;
+        padding: 1px 8px;
+        margin-left: 6px;
+        vertical-align: 1px;
+      }
+      /* buttons */
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 46px;
+        border-radius: 12px;
+        background: var(--brand);
+        color: var(--brand-ink);
+        font-weight: 700;
+        width: 100%;
+        font-size: 14px;
+      }
+      .btn:hover {
+        filter: brightness(1.06);
+      }
+      .btn.sm {
+        height: 36px;
+        font-size: 12.5px;
+        width: auto;
+        padding: 0 16px;
+        border-radius: 10px;
+      }
+      .btn.ghost {
+        background: var(--surface);
+        color: var(--ink);
+        border: 1px solid var(--line);
+      }
+      .btn.ghost:hover {
+        border-color: var(--brand);
+      }
+      .btn[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--brand-soft);
+        border-radius: 99px;
+        padding: 5px 8px 5px 12px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .chip svg {
+        opacity: 0.7;
+      }
+      .fs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .fs button {
+        height: 42px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .fs button.on {
+        background: var(--brand-soft);
+        border-color: var(--brand);
+      }
+      .pager {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        margin-top: 20px;
+      }
+      .pager button {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .pager button.on {
+        background: var(--brand);
+        color: var(--brand-ink);
+      }
+      .pager button[disabled] {
+        opacity: 0.35;
+        cursor: default;
+      }
+      /* nav */
+      .nav {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--line);
+        background: var(--surface);
+        padding: 8px 8px 10px;
+      }
+      .nav button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        font-size: 10.5px;
+        color: var(--muted);
+        font-weight: 500;
+        padding: 4px 0;
+        border-radius: 10px;
+      }
+      .nav button.on {
+        color: var(--brand);
+        font-weight: 700;
+      }
+      /* sheet */
+      .ov {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 25, 18, 0.45);
+        display: flex;
+        align-items: flex-end;
+        z-index: 20;
+      }
+      .sheet {
+        background: var(--surface);
+        width: 100%;
+        max-height: 88%;
+        border-radius: 22px 22px 0 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .sheet .sh {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 18px 6px;
+      }
+      .sheet .sh h2 {
+        font-size: 17px;
+      }
+      .sbody {
+        overflow-y: auto;
+        padding: 0 18px 8px;
+      }
+      .sfoot {
+        padding: 12px 18px 18px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        border-top: 1px solid var(--line);
+      }
+      .grp {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .grp:last-child {
+        border: 0;
+      }
+      .grp h4 {
+        margin: 0 0 10px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .opt {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        width: 100%;
+        font-size: 13px;
+      }
+      .cb,
+      .rd {
+        width: 18px;
+        height: 18px;
+        border: 1.6px solid var(--muted);
+        border-radius: 5px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        color: var(--brand-ink);
+      }
+      .rd {
+        border-radius: 50%;
+      }
+      .opt.on .cb {
+        background: var(--brand);
+        border-color: var(--brand);
+      }
+      .opt.on .rd {
+        border-color: var(--brand);
+        box-shadow:
+          inset 0 0 0 4px var(--surface),
+          inset 0 0 0 10px var(--brand);
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--brand);
+      }
+      .rng {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .seg {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .seg button {
+        padding: 8px 14px;
+        border-radius: 99px;
+        border: 1px solid var(--line);
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+      .seg button.on {
+        background: var(--brand);
+        color: var(--brand-ink);
+        border-color: var(--brand);
+      }
+      /* cards generic */
+      .box {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px;
+      }
+      .prefc {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .prefc .lf {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--brand-soft);
+        display: grid;
+        place-items: center;
+        color: var(--brand);
+        flex: none;
+      }
+      /* detail */
+      .dimg {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        background: var(--imgbg);
+        aspect-ratio: 1/0.9;
+      }
+      .dimg svg.pl {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .dtop {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .dtop .rb {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.92);
+        color: #33403a;
+        display: grid;
+        place-items: center;
+      }
+      .dtop .rb.on {
+        color: var(--heart);
+      }
+      .thumbs {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .thumbs button {
+        width: 58px;
+        height: 58px;
+        border-radius: 12px;
+        background: var(--imgbg);
+        overflow: hidden;
+        border: 2px solid transparent;
+      }
+      .thumbs button.on {
+        border-color: var(--brand);
+      }
+      .thumbs svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .attrs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin: 14px 0;
+      }
+      .attrs div {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 11px;
+        color: var(--muted);
+        line-height: 1.25;
+      }
+      .attrs svg {
+        color: var(--brand);
+        flex: none;
+      }
+      .attrs b {
+        display: block;
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .tabs {
+        display: flex;
+        gap: 20px;
+        border-bottom: 1px solid var(--line);
+        margin-top: 16px;
+      }
+      .tabs button {
+        padding: 8px 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+      }
+      .tabs button.on {
+        color: var(--ink);
+        border-color: var(--brand);
+      }
+      .acc {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--surface);
+        overflow: hidden;
+      }
+      .acc .ah {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 13px 14px;
+        font-weight: 600;
+        font-size: 13px;
+        border-top: 1px solid var(--line);
+      }
+      .acc .ah:first-child {
+        border-top: 0;
+      }
+      .acc .ah svg {
+        transition: transform 0.2s;
+      }
+      .acc .ah.on svg {
+        transform: rotate(180deg);
+      }
+      .acc .ab {
+        padding: 0 14px 14px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .price {
+        font-size: 20px;
+        font-weight: 800;
+        margin: 2px 0;
+      }
+      .stars {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .stars svg {
+        color: #e0a526;
+      }
+      table.dt {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      table.dt td {
+        padding: 7px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      table.dt td:first-child {
+        color: var(--muted);
+        width: 42%;
+      }
+      /* cart */
+      .ci {
+        display: flex;
+        gap: 12px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .ci .pimg {
+        width: 76px;
+        height: 84px;
+        border-radius: 12px;
+        flex: none;
+      }
+      .ci .in {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .qty {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+      .qty button {
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+      }
+      .qrow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .qrow .qlabel {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .qrow .qtot {
+        margin-left: auto;
+        font-size: 15px;
+      }
+      .qty button[disabled] {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .qty span {
+        min-width: 24px;
+        text-align: center;
+        font-weight: 600;
+      }
+      .sum {
+        display: grid;
+        gap: 8px;
+        font-size: 13px;
+      }
+      .sum div {
+        display: flex;
+        justify-content: space-between;
+      }
+      .sum .tot {
+        font-weight: 800;
+        font-size: 16px;
+        border-top: 1px dashed var(--line);
+        padding-top: 10px;
+        margin-top: 2px;
+      }
+      .disc {
+        color: var(--ok);
+      }
+      .empty {
+        text-align: center;
+        padding: 48px 20px;
+        color: var(--muted);
+      }
+      .empty .ei {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--brand-soft);
+        color: var(--brand);
+        display: grid;
+        place-items: center;
+        margin: 0 auto 14px;
+      }
+      .empty h3 {
+        color: var(--ink);
+        margin: 0 0 4px;
+        font-size: 15px;
+      }
+      .empty p {
+        margin: 0 0 16px;
+        font-size: 13px;
+      }
+      .stick {
+        position: sticky;
+        bottom: 0;
+        background: var(--bg);
+        padding: 12px 0 4px;
+        margin-top: 8px;
+        border-top: 1px solid var(--line);
+      }
+      /* forms */
+      .fld {
+        display: grid;
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+      .fld label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .fld input {
+        height: 42px;
+        border: 1px solid var(--line);
+        background: var(--bg);
+        border-radius: 10px;
+        padding: 0 12px;
+        outline: 0;
+        width: 100%;
+      }
+      .fld input:focus {
+        border-color: var(--brand);
+      }
+      .fld input.err {
+        border-color: var(--heart);
+      }
+      .choice {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        margin-bottom: 8px;
+        background: var(--surface);
+      }
+      .choice.on {
+        border-color: var(--brand);
+        background: var(--brand-soft);
+      }
+      .choice .rd {
+        flex: none;
+      }
+      .choice.on .rd {
+        border-color: var(--brand);
+        box-shadow:
+          inset 0 0 0 4px var(--brand-soft),
+          inset 0 0 0 10px var(--brand);
+      }
+      .choice .ct {
+        flex: 1;
+        min-width: 0;
+      }
+      .choice b {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .choice small {
+        color: var(--muted);
+        font-size: 11.5px;
+      }
+      .choice .pr {
+        font-size: 12.5px;
+        font-weight: 600;
+      }
+      .badge2 {
+        width: 40px;
+        height: 26px;
+        border-radius: 6px;
+        background: var(--surface2);
+        display: grid;
+        place-items: center;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        flex: none;
+        color: var(--ink);
+      }
+      .gl {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--muted);
+        margin: 14px 0 8px;
+      }
+      .vrow {
+        display: flex;
+        gap: 8px;
+      }
+      .vrow input {
+        flex: 1;
+        height: 42px;
+        border: 1px solid var(--line);
+        background: var(--bg);
+        border-radius: 10px;
+        padding: 0 12px;
+        outline: 0;
+        min-width: 0;
+      }
+      /* payment */
+      .cd {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--brand-soft);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 12.5px;
+      }
+      .cd b {
+        font-size: 17px;
+        font-variant-numeric: tabular-nums;
+      }
+      .big {
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .qrb {
+        background: #fff;
+        border-radius: 16px;
+        padding: 14px;
+        width: 230px;
+        margin: 0 auto;
+        color: #1e2a22;
+        border: 1px solid var(--line);
+      }
+      .qrb svg {
+        width: 100%;
+        display: block;
+      }
+      .vano {
+        font-size: 21px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        font-variant-numeric: tabular-nums;
+        word-break: break-all;
+      }
+      .ctr {
+        text-align: center;
+      }
+      .proc {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        font-weight: 600;
+      }
+      .spin {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 4px solid var(--brand-soft);
+        border-top-color: var(--brand);
+        animation: sp 0.9s linear infinite;
+      }
+      @keyframes sp {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .okc {
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
+        background: var(--brand);
+        color: var(--brand-ink);
+        display: grid;
+        place-items: center;
+        margin: 28px auto 16px;
+        animation: pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1);
+      }
+      @keyframes pop {
+        from {
+          transform: scale(0.4);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .status {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 99px;
+        padding: 2px 10px;
+      }
+      .status.w {
+        background: color-mix(in srgb, var(--warn) 18%, transparent);
+        color: var(--warn);
+      }
+      .status.g {
+        background: var(--brand-soft);
+        color: var(--ok);
+      }
+      .tl {
+        display: grid;
+        gap: 14px;
+        margin-top: 6px;
+      }
+      .tl div {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        font-size: 13px;
+      }
+      .tl i {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--line);
+        margin-top: 5px;
+        flex: none;
+      }
+      .tl i.on {
+        background: var(--brand);
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 84px;
+        transform: translate(-50%, 20px);
+        background: var(--ink);
+        color: var(--bg);
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-size: 12.5px;
+        font-weight: 600;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.25s;
+        z-index: 50;
+        white-space: nowrap;
+        max-width: 90%;
+      }
+      #toast.on {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      /* ===== responsive layout ===== */
+      .top {
+        display: none;
+      }
+      .lamp.lit {
+        color: #b7861a;
+      }
+      .lamp:hover {
+        background: var(--surface2);
+      }
+      .hd {
+        margin: 0 -16px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .crumb,
+      .dskbtn,
+      .asidegl {
+        display: none;
+      }
+      .dgrid,
+      .two,
+      .lgrid {
+        display: block;
+      }
+      .aside {
+        display: contents;
+      }
+      .side {
+        display: none;
+      }
+      .rlist {
+        display: grid;
+        gap: 10px;
+      }
+      .rlist .row {
+        margin-bottom: 0;
+      }
+      .hero .trio {
+        display: none;
+      }
+      .hero .m1,
+      .hero .m1 svg {
+        height: 100%;
+      }
+      .ptitle {
+        font-size: 20px;
+        font-weight: 800;
+        margin: 6px 0 2px;
+      }
+      .info {
+        margin-top: 14px;
+      }
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tsearch {
+        margin: 0;
+      }
+      .sidehd {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0 0;
+      }
+      @media (min-width: 600px) {
+        .wrap {
+          padding: 0 24px 28px;
+        }
+        .hd {
+          margin: 0 -24px;
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        }
+        .hs {
+          margin: 0 -24px;
+          padding: 0 24px 4px;
+        }
+        .mini {
+          flex-basis: 150px;
+        }
+        .rlist {
+          grid-template-columns: 1fr 1fr;
+        }
+        .cats {
+          gap: 12px;
+        }
+      }
+      @media (min-width: 900px) {
+        .top {
+          display: block;
+          background: var(--surface);
+          border-bottom: 1px solid var(--line);
+          padding: 0 32px;
+          flex: none;
+          z-index: 6;
+        }
+        .topin {
+          max-width: 1200px;
+          margin: 0 auto;
+          height: 68px;
+          display: flex;
+          align-items: center;
+          gap: 24px;
+        }
+        .top .logo {
+          font-size: 21px;
+          cursor: pointer;
+          margin-right: 4px;
+        }
+        .tnav {
+          display: flex;
+          gap: 2px;
+        }
+        .tnav button {
+          padding: 8px 14px;
+          border-radius: 10px;
+          font-weight: 600;
+          color: var(--muted);
+        }
+        .tnav button:hover {
+          background: var(--surface2);
+          color: var(--ink);
+        }
+        .tnav button.on {
+          background: var(--brand-soft);
+          color: var(--ink);
+        }
+        .tsearch {
+          flex: 1;
+          max-width: 420px;
+          margin: 0 0 0 auto;
+          background: var(--bg);
+          height: 42px;
+        }
+        .nav {
+          display: none;
+        }
+        .wrap {
+          padding: 0 32px 56px;
+        }
+        .hd {
+          position: static;
+          margin: 0;
+          padding: 24px 0 14px;
+        }
+        .hd .hi,
+        .hd.mob,
+        .m-only,
+        .mobbtn {
+          display: none !important;
+        }
+        .dskbtn {
+          display: inline-flex;
+        }
+        .hd h1 {
+          font-size: 26px;
+          font-weight: 800;
+          letter-spacing: -0.01em;
+        }
+        h2 {
+          font-size: 21px;
+        }
+        .ptitle {
+          font-size: 28px;
+          margin-top: 28px;
+        }
+        .sec {
+          margin: 40px 0 16px;
+        }
+        /* home */
+        .hero {
+          grid-template-columns: 1fr 1.25fr;
+          min-height: 380px;
+          border-radius: 28px;
+          margin-top: 24px;
+        }
+        .hero .t {
+          padding: 48px 40px 48px 52px;
+          gap: 16px;
+        }
+        .hero h3 {
+          font-size: 52px;
+        }
+        .hero p {
+          font-size: 16px;
+          max-width: 360px;
+        }
+        .herob {
+          align-self: flex-start;
+          margin-top: 8px;
+          height: 46px;
+          padding: 0 24px;
+          font-size: 14px;
+        }
+        .hero .m1 {
+          display: none;
+        }
+        .hero .trio {
+          display: flex;
+          align-items: flex-end;
+          width: 100%;
+          height: 100%;
+          padding: 24px 16px 0;
+        }
+        .hero .trio .tw {
+          min-width: 0;
+        }
+        .hero .trio svg {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+        .cats {
+          grid-template-columns: repeat(8, 1fr);
+          gap: 14px;
+        }
+        .cat {
+          padding: 14px 6px;
+          font-size: 13px;
+          font-weight: 600;
+          gap: 8px;
+        }
+        .cim {
+          width: 76px;
+          height: 76px;
+        }
+        .hs {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 16px;
+          margin: 0;
+          padding: 0;
+          overflow: visible;
+        }
+        .mini {
+          flex: none;
+          cursor: pointer;
+        }
+        .mini:hover {
+          border-color: var(--brand);
+        }
+        .mini .pb {
+          padding: 12px 14px 14px;
+        }
+        .mini .pn {
+          font-size: 14px;
+        }
+        .mini .pp {
+          font-size: 13px;
+        }
+        /* list */
+        .lgrid {
+          display: grid;
+          grid-template-columns: 260px minmax(0, 1fr);
+          gap: 32px;
+          align-items: start;
+        }
+        .side {
+          display: block;
+          position: sticky;
+          top: 16px;
+          background: var(--surface);
+          border: 1px solid var(--line);
+          border-radius: 18px;
+          padding: 0 20px 6px;
+        }
+        .side .grp:first-of-type {
+          padding-top: 12px;
+        }
+        .fs {
+          display: none;
+        }
+        .lmain .muted:first-child {
+          margin-top: 0;
+        }
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 18px;
+        }
+        .pc .pn {
+          font-size: 14px;
+        }
+        /* detail */
+        .crumb {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          color: var(--muted);
+          font-weight: 600;
+          margin: 22px 0 14px;
+        }
+        .crumb:hover {
+          color: var(--brand);
+        }
+        .dgrid {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 56px;
+          align-items: start;
+        }
+        .gal {
+          position: sticky;
+          top: 16px;
+        }
+        .dimg {
+          aspect-ratio: 1/1;
+          border-radius: 24px;
+        }
+        .dtop .bk {
+          display: none;
+        }
+        .thumbs button {
+          width: 80px;
+          height: 80px;
+        }
+        .info {
+          margin-top: 0;
+        }
+        .info h1 {
+          font-size: 32px !important;
+          letter-spacing: -0.01em;
+        }
+        .price {
+          font-size: 26px;
+        }
+        .attrs {
+          margin: 20px 0;
+        }
+        .attrs div {
+          font-size: 12.5px;
+        }
+        /* cart / checkout */
+        .two {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 380px;
+          gap: 36px;
+          align-items: start;
+        }
+        .aside {
+          display: block;
+          position: sticky;
+          top: 16px;
+          background: var(--surface);
+          border: 1px solid var(--line);
+          border-radius: 18px;
+          padding: 20px;
+        }
+        .asidegl {
+          display: block;
+          margin-top: 0 !important;
+        }
+        .aside .box {
+          border: 0;
+          padding: 0;
+          background: none;
+        }
+        .stick {
+          position: static;
+          border: 0;
+          padding: 16px 0 0;
+          margin: 0;
+          background: none;
+        }
+        .rlist {
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+        /* modal instead of bottom sheet */
+        .ov {
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+        }
+        .ov > div {
+          max-width: 480px;
+        }
+        .sheet {
+          border-radius: 22px;
+          max-height: 84vh;
+        }
+        #toast {
+          bottom: 32px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="toast" role="status"></div>
+
+    <script>
+      /* ---------- helpers ---------- */
+      const $ = (s) => document.querySelector(s);
+      const rp = (n) =>
+        "Rp " + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      const I = {
+        search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>',
+        heart:
+          '<path d="M12 20s-7-4.4-7-10a4.2 4.2 0 0 1 7-3 4.2 4.2 0 0 1 7 3c0 5.6-7 10-7 10z"/>',
+        user: '<circle cx="12" cy="8" r="4"/><path d="M4 20c1-4 4-6 8-6s7 2 8 6"/>',
+        bag: '<path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+        back: '<path d="M15 5l-7 7 7 7"/>',
+        close: '<path d="M6 6l12 12M18 6L6 18"/>',
+        home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>',
+        grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>',
+        chev: '<path d="M6 9l6 6 6-6"/>',
+        chevr: '<path d="M9 6l6 6-6 6"/>',
+        chevl: '<path d="M15 6l-6 6 6 6"/>',
+        star: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/>',
+        size: '<path d="M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4"/>',
+        sun: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/>',
+        leafi:
+          '<path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19c3-4 6-7 9-9"/>',
+        filter: '<path d="M4 6h16M7 12h10M10 18h4"/>',
+        sort: '<path d="M8 5v14M5 16l3 3 3-3M16 19V5M13 8l3-3 3 3"/>',
+        trash: '<path d="M5 7h14M10 7V5h4v2M7 7l1 13h8l1-13"/>',
+        plus: '<path d="M12 5v14M5 12h14"/>',
+        minus: '<path d="M5 12h14"/>',
+        check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+        share:
+          '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/>',
+        truck:
+          '<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+        pin: '<path d="M12 21s7-6.3 7-11.5a7 7 0 0 0-14 0C5 14.700 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+        card: '<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.500h18"/>',
+        copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/>',
+        bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.6.500 1 1.200 1 2V16h5v-.100c0-.800.400-1.500 1-2A6 6 0 0 0 12 3z"/>',
+        tag: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.500" cy="8" r="1.200"/>',
+        box: '<path d="M4 8l8-4 8 4v9l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v9"/>',
+      };
+      const ic = (n, s = 20, fill) =>
+        `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="${fill || "none"}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+
+      /* ---------- plant art (inline SVG) ---------- */
+      const G0 = "#4C6F55",
+        G1 = "#5E8466",
+        G2 = "#6F9576",
+        G3 = "#86A98B",
+        G4 = "#A3C0A6";
+      const leaf = (cx, cy, rx, ry, rot, f, vein = true) =>
+        `<g transform="rotate(${rot} ${cx} ${cy})"><ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${f}"/>${vein ? `<path d="M${cx} ${cy - ry + 2}V${cy + ry - 2}" stroke="rgba(255,255,255,.35)" stroke-width="1" fill="none"/>` : ""}</g>`;
+      const blade = (x, y, a, len, w, f) =>
+        `<path d="M${-w} 0Q${-w * 0.7} ${-len * 0.55} 0 ${-len}Q${w * 0.7} ${-len * 0.55} ${w} 0Z" fill="${f}" transform="translate(${x} ${y}) rotate(${a})"/>`;
+      const stemP = (d, c = G0, w = 1.5) =>
+        `<path d="${d}" stroke="${c}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+      const POT =
+        '<path d="M33 77h34l-4 19H37z" fill="#E4E0D6"/><rect x="31" y="73" width="38" height="7" rx="2.500" fill="#F1EEE6"/><path d="M33 80h34" stroke="#D2CEC2" stroke-width=".8"/>';
+      const K = {
+        monstera: () =>
+          stemP("M50 76Q44 62 36 52") +
+          stemP("M50 76Q56 58 63 45") +
+          stemP("M50 76V32") +
+          leaf(36, 50, 13, 16, -28, G1) +
+          leaf(63, 44, 14, 17, 24, G2) +
+          leaf(50, 28, 12, 14, 0, G0) +
+          leaf(33, 67, 8, 10, -60, G3) +
+          leaf(68, 64, 8, 10, 60, G3),
+        snake: () =>
+          [
+            [-18, 46, 5],
+            [-8, 58, 5.5],
+            [0, 66, 6],
+            [9, 56, 5.5],
+            [19, 44, 5],
+          ]
+            .map(([a, l, w], i) =>
+              blade(50, 76, a, l, w, [G1, G0, G2, G1, G3][i]),
+            )
+            .join(""),
+        lily: () =>
+          [
+            [-55, 38, 6],
+            [-30, 46, 6],
+            [-10, 40, 6],
+            [18, 44, 6],
+            [45, 40, 6],
+            [62, 32, 5],
+          ]
+            .map(([a, l, w], i) =>
+              blade(50, 76, a, l, w, [G3, G1, G0, G2, G1, G3][i]),
+            )
+            .join("") +
+          stemP("M44 76V44", "#7FA086", 1.4) +
+          stemP("M57 76V38", "#7FA086", 1.4) +
+          leaf(44, 38, 6, 12, -8, "#F7F6F0", false) +
+          leaf(57, 32, 6, 13, 10, "#F7F6F0", false) +
+          `<path d="M44 40v6M57 34v7" stroke="#E5C766" stroke-width="2" stroke-linecap="round"/>`,
+        zz: () => {
+          let o = "";
+          [
+            [-28, 38],
+            [0, 48],
+            [26, 40],
+          ].forEach(([a, l], k) => {
+            o += `<g transform="translate(50 76) rotate(${a})">${stemP(`M0 0V${-l}`, G0, 1.4)}`;
+            for (let i = 1; i <= 5; i++) {
+              const y = (-l * i) / 5.6;
+              o += `<ellipse cx="-4.5" cy="${y}" rx="4.500" ry="2.600" fill="${k % 2 ? G1 : G2}" transform="rotate(-35 -4.500 ${y})"/><ellipse cx="4.500" cy="${y}" rx="4.500" ry="2.600" fill="${k % 2 ? G2 : G1}" transform="rotate(35 4.500 ${y})"/>`;
+            }
+            o += `<ellipse cx="0" cy="${-l - 3}" rx="2.600" ry="4.200" fill="${G1}"/></g>`;
+          });
+          return o;
+        },
+        pothos: () =>
+          stemP("M50 76Q40 60 30 62Q22 66 24 82", "#6B8E6F", 1.2) +
+          stemP("M50 76Q60 56 74 60Q80 68 76 86", "#6B8E6F", 1.2) +
+          stemP("M50 76Q50 56 50 38", "#6B8E6F", 1.2) +
+          leaf(50, 34, 9, 11, 0, G2) +
+          leaf(38, 48, 8, 10, -40, G1) +
+          leaf(62, 46, 8, 10, 40, G3) +
+          leaf(28, 62, 7, 9, -70, G1) +
+          leaf(75, 58, 7, 9, 70, G2) +
+          leaf(24, 80, 6, 8, -10, G3) +
+          leaf(77, 84, 6, 8, 10, G1),
+        aloe: () =>
+          [
+            [-60, 30],
+            [-40, 38],
+            [-20, 44],
+            [0, 46],
+            [20, 44],
+            [40, 38],
+            [60, 30],
+          ]
+            .map(([a, l], i) =>
+              blade(50, 76, a, l, 6, [G3, G1, G2, G0, G2, G1, G3][i]),
+            )
+            .join(""),
+        fern: () =>
+          [-75, -55, -38, -20, -4, 12, 28, 45, 62, 78]
+            .map((a, i) =>
+              blade(50, 76, a, 40 + (i % 3) * 5, 3.5, [G1, G2, G3][i % 3]),
+            )
+            .join(""),
+        palm: () =>
+          [-62, -38, -14, 10, 34, 58]
+            .map(
+              (a, i) =>
+                stemP(
+                  `M50 76L${50 + Math.sin((a * Math.PI) / 180) * 26} ${76 - Math.cos((a * Math.PI) / 180) * 26}`,
+                  G0,
+                  1.3,
+                ) +
+                blade(
+                  50 + Math.sin((a * Math.PI) / 180) * 26,
+                  76 - Math.cos((a * Math.PI) / 180) * 26,
+                  a + (a < 0 ? -10 : 10),
+                  34,
+                  4.5,
+                  [G1, G2, G0][i % 3],
+                ),
+            )
+            .join(""),
+        cactus: () =>
+          `<rect x="41" y="36" width="18" height="42" rx="9" fill="${G1}"/><rect x="27" y="48" width="9" height="22" rx="4.500" fill="${G2}"/><rect x="27" y="62" width="22" height="8" rx="4" fill="${G2}"/><rect x="64" y="44" width="9" height="18" rx="4.500" fill="${G2}"/><rect x="52" y="56" width="21" height="8" rx="4" fill="${G2}"/><circle cx="50" cy="34" r="4" fill="#D98BA0"/><path d="M45 48v6M50 44v6M55 48v6" stroke="rgba(255,255,255,.4)" stroke-width="1" stroke-linecap="round"/>`,
+        jade: () =>
+          stemP("M50 76V52", "#8A7A63", 4) +
+          stemP("M50 62L38 50", "#8A7A63", 2.5) +
+          stemP("M50 60L62 48", "#8A7A63", 2.5) +
+          [
+            [50, 40, 9, 7],
+            [36, 46, 8, 6],
+            [63, 44, 8, 6],
+            [43, 54, 7, 5],
+            [57, 54, 7, 5],
+            [50, 50, 8, 6],
+            [30, 54, 6, 5],
+            [69, 54, 6, 5],
+          ]
+            .map(
+              ([x, y, rx, ry], i) =>
+                `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${[G1, G2, G3, G0][i % 4]}"/>`,
+            )
+            .join(""),
+        basil: () =>
+          stemP("M50 76V40") +
+          stemP("M50 66L36 54") +
+          stemP("M50 62L64 50") +
+          [
+            [50, 36, 8, 6, 0],
+            [38, 50, 7, 5, -30],
+            [62, 46, 7, 5, 30],
+            [42, 62, 6, 4.5, -50],
+            [58, 60, 6, 4.5, 50],
+            [50, 50, 7, 5, 0],
+          ]
+            .map(
+              ([x, y, rx, ry, r], i) =>
+                `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${[G2, G1, G3][i % 3]}" transform="rotate(${r} ${x} ${y})"/>`,
+            )
+            .join(""),
+        anthurium: () =>
+          leaf(36, 58, 10, 13, -35, G1) +
+          leaf(65, 58, 10, 13, 35, G2) +
+          leaf(50, 50, 9, 12, 0, G0) +
+          stemP("M45 76Q42 56 40 40", "#7FA086", 1.3) +
+          stemP("M52 76Q54 52 58 36", "#7FA086", 1.3) +
+          stemP("M50 76V30", "#7FA086", 1.3) +
+          leaf(40, 36, 7, 9, -12, "#D98C97", false) +
+          leaf(58, 32, 7, 9, 12, "#E3A4AC", false) +
+          leaf(50, 26, 6.5, 8, 0, "#D98C97", false) +
+          '<path d="M40 38v-4M58 34v-4M50 28v-3" stroke="#EBCB6B" stroke-width="2" stroke-linecap="round"/>',
+        rubber: () =>
+          stemP("M50 76V24", "#6A5A48", 2.5) +
+          [
+            [38, 64, 10, 6, -20],
+            [62, 56, 10, 6, 20],
+            [37, 46, 10, 6, -20],
+            [63, 38, 10, 6, 20],
+            [40, 30, 9, 5.5, -25],
+            [50, 20, 6, 9, 0],
+          ]
+            .map(([x, y, rx, ry, r], i) =>
+              leaf(x, y, rx, ry, r, [G0, G1, G2][i % 3], true),
+            )
+            .join(""),
+        orchid: () =>
+          leaf(36, 66, 6, 16, -62, G1) +
+          leaf(65, 66, 6, 16, 62, G2) +
+          stemP("M50 76Q48 50 40 36Q36 28 44 22", "#7C9C86", 1.6) +
+          [
+            [44, 24],
+            [38, 34],
+            [44, 44],
+            [49, 54],
+          ]
+            .map(
+              ([x, y], i) =>
+                `<g transform="translate(${x} ${y})"><circle cx="-3.500" cy="0" r="4" fill="#F6E9EE"/><circle cx="3.500" cy="0" r="4" fill="#F6E9EE"/><circle cx="0" cy="-3.500" r="4" fill="#F9EEF2"/><circle cx="0" cy="3" r="3.200" fill="#E7B3C3"/></g>`,
+            )
+            .join(""),
+      };
+      const IMG = {}; // kind -> data:image/jpeg;base64,... (foto asli); jika kosong, dipakai ilustrasi
+      const CROP = {
+        "12 -2 76 76": ["1.5", "50% 0%"],
+        "22 38 56 62": ["1.9", "50% 100%"],
+        "18 18 64 80": ["1.3", "50% 40%"],
+        "10 0 90 100": ["1.15", "50% 40%"],
+      };
+      const art = (kind, vb = "0 0 100 100", pot = true) =>
+        IMG[kind]
+          ? `<img class="pl ph" src="${IMG[kind]}" alt="" loading="lazy"${CROP[vb] ? ` style="transform:scale(${CROP[vb][0]});transform-origin:${CROP[vb][1]}"` : ""}>`
+          : `<svg class="pl" viewBox="${vb}" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${K[kind]()}${pot ? POT : ""}</svg>`;
+
+      /* ---------- data ---------- */
+      const LIGHT_T = {
+        Rendah:
+          "Cahaya rendah — cocok untuk ruangan teduh; hindari sinar matahari langsung.",
+        Sedang:
+          "Cahaya sedang — letakkan dekat jendela dengan cahaya terang tidak langsung.",
+        Terang:
+          "Cahaya terang — butuh sinar matahari langsung sekitar 4–6 jam per hari.",
+      };
+      const mk = (
+        id,
+        kind,
+        name,
+        latin,
+        price,
+        size,
+        light,
+        care,
+        tags,
+        pop,
+        rate,
+        rev,
+        stock,
+        height,
+        kw,
+        desc,
+        water,
+        tips,
+      ) => ({
+        id,
+        kind,
+        name,
+        latin,
+        price,
+        size,
+        light,
+        care,
+        tags,
+        pop,
+        rate,
+        rev,
+        stock,
+        height,
+        kw,
+        desc,
+        water,
+        tips,
+      });
+      const P = [
+        mk(
+          1,
+          "monstera",
+          "Monstera Deliciosa",
+          "Monstera deliciosa",
+          120000,
+          "Sedang",
+          "Sedang",
+          "Mudah",
+          ["indoor", "large"],
+          98,
+          4.8,
+          120,
+          12,
+          "60–90 cm",
+          "pemula ruang tamu populer",
+          "Tanaman hias populer dengan daun berlubang yang unik. Cocok untuk indoor dan mudah dirawat.",
+          "Sekali seminggu, saat 3–4 cm tanah bagian atas kering.",
+          "Lap daun tiap 2 minggu agar pori-pori tidak tertutup debu. Beri tiang rambat bila sudah tinggi.",
+        ),
+        mk(
+          2,
+          "snake",
+          "Snake Plant",
+          "Dracaena trifasciata",
+          85000,
+          "Kecil",
+          "Rendah",
+          "Mudah",
+          ["indoor", "small"],
+          95,
+          4.9,
+          210,
+          20,
+          "30–45 cm",
+          "pemula kantor meja teduh udara bersih",
+          "Daun tegak berpola belang yang tahan banting dan toleran terhadap ruangan minim cahaya.",
+          "Setiap 10–14 hari. Lebih baik kurang air daripada kelebihan.",
+          "Jangan biarkan air menggenang di pot. Cocok untuk kamar atau sudut ruangan yang gelap.",
+        ),
+        mk(
+          3,
+          "lily",
+          "Peace Lily",
+          "Spathiphyllum wallisii",
+          110000,
+          "Sedang",
+          "Sedang",
+          "Sedang",
+          ["indoor", "flowering"],
+          80,
+          4.6,
+          86,
+          9,
+          "40–60 cm",
+          "bunga putih kamar",
+          "Daun hijau mengkilap dengan bunga putih elegan yang bisa muncul sepanjang tahun.",
+          "Dua kali seminggu; daun layu menandakan tanaman haus.",
+          "Siram saat daun mulai merunduk. Jauhkan dari hewan peliharaan karena sedikit beracun.",
+        ),
+        mk(
+          4,
+          "zz",
+          "ZZ Plant",
+          "Zamioculcas zamiifolia",
+          95000,
+          "Sedang",
+          "Rendah",
+          "Mudah",
+          ["indoor"],
+          90,
+          4.8,
+          142,
+          15,
+          "45–70 cm",
+          "pemula kantor teduh",
+          "Daun tebal mengkilap yang tahan kering dan sangat cocok untuk kantor atau ruangan teduh.",
+          "Setiap 2–3 minggu. Umbi di dalam tanah menyimpan cadangan air.",
+          "Hindari penyiraman berlebih. Daun menguning berarti terlalu basah.",
+        ),
+        mk(
+          5,
+          "pothos",
+          "Pothos",
+          "Epipremnum aureum",
+          75000,
+          "Kecil",
+          "Rendah",
+          "Mudah",
+          ["indoor", "hanging", "small"],
+          88,
+          4.7,
+          174,
+          24,
+          "20–40 cm (menjuntai)",
+          "pemula gantung rak teduh",
+          "Tanaman rambat berdaun hati yang cantik digantung atau diletakkan di rak.",
+          "Seminggu sekali; tahan jika kadang terlewat.",
+          "Pangkas ujung sulur agar tumbuh lebat. Mudah diperbanyak lewat stek air.",
+        ),
+        mk(
+          6,
+          "aloe",
+          "Aloe Vera",
+          "Aloe barbadensis",
+          55000,
+          "Kecil",
+          "Terang",
+          "Mudah",
+          ["succulent", "herbal", "small", "outdoor"],
+          84,
+          4.7,
+          98,
+          30,
+          "25–40 cm",
+          "sukulen herbal kulit",
+          "Sukulen berdaun daging berisi gel yang dikenal untuk perawatan kulit.",
+          "Setiap 2 minggu; pastikan tanah benar-benar kering.",
+          "Gunakan media tanam berpasir agar drainase lancar.",
+        ),
+        mk(
+          7,
+          "fern",
+          "Boston Fern",
+          "Nephrolepis exaltata",
+          90000,
+          "Sedang",
+          "Sedang",
+          "Sedang",
+          ["hanging", "indoor"],
+          72,
+          4.5,
+          64,
+          11,
+          "40–60 cm",
+          "gantung teras lembap",
+          "Pakis rimbun dengan daun melengkung yang cantik untuk digantung.",
+          "Tiga kali seminggu; tanah dijaga tetap lembap.",
+          "Semprot daun dengan air secara rutin untuk menjaga kelembapan.",
+        ),
+        mk(
+          8,
+          "cactus",
+          "Kaktus Mini",
+          "Cereus sp.",
+          35000,
+          "Kecil",
+          "Terang",
+          "Mudah",
+          ["succulent", "small", "outdoor"],
+          70,
+          4.6,
+          77,
+          40,
+          "10–20 cm",
+          "sukulen meja mungil",
+          "Kaktus mungil yang pas untuk meja kerja dan hampir tidak butuh perhatian.",
+          "Dua minggu sekali, sedikit saja.",
+          "Letakkan di tempat paling terang, misalnya tepi jendela yang terkena matahari.",
+        ),
+        mk(
+          9,
+          "basil",
+          "Kemangi",
+          "Ocimum basilicum",
+          25000,
+          "Kecil",
+          "Terang",
+          "Sedang",
+          ["herbal", "outdoor", "small"],
+          60,
+          4.4,
+          52,
+          35,
+          "20–30 cm",
+          "herbal dapur masak",
+          "Herba harum untuk lalapan dan masakan yang bisa dipanen langsung dari pot.",
+          "Setiap hari saat cuaca panas; tanah jangan sampai kering.",
+          "Petik pucuk secara rutin agar percabangan makin banyak.",
+        ),
+        mk(
+          10,
+          "anthurium",
+          "Anthurium",
+          "Anthurium andraeanum",
+          180000,
+          "Sedang",
+          "Sedang",
+          "Sulit",
+          ["flowering", "indoor"],
+          66,
+          4.5,
+          41,
+          6,
+          "40–55 cm",
+          "bunga merah koleksi",
+          "Bunga berbentuk hati yang mengkilap, tahan berminggu-minggu dan mempercantik ruangan.",
+          "Dua kali seminggu dengan air tidak terlalu dingin.",
+          "Butuh kelembapan stabil dan pupuk bunga tiap bulan agar rajin berbunga.",
+        ),
+        mk(
+          11,
+          "palm",
+          "Areca Palm",
+          "Dypsis lutescens",
+          250000,
+          "Besar",
+          "Terang",
+          "Sedang",
+          ["large", "outdoor", "indoor"],
+          78,
+          4.7,
+          93,
+          7,
+          "120–150 cm",
+          "teras ruang tamu besar",
+          "Palem rimbun yang memberi nuansa tropis di teras atau ruang tamu yang luas.",
+          "Dua kali seminggu; kurangi saat musim hujan.",
+          "Putar pot berkala supaya pertumbuhan merata ke semua sisi.",
+        ),
+        mk(
+          12,
+          "rubber",
+          "Rubber Plant",
+          "Ficus elastica",
+          160000,
+          "Besar",
+          "Sedang",
+          "Mudah",
+          ["large", "indoor"],
+          75,
+          4.6,
+          58,
+          10,
+          "100–130 cm",
+          "pemula ruang tamu pojok",
+          "Daun besar tebal berwarna hijau tua yang menjadi aksen kuat di pojok ruangan.",
+          "Seminggu sekali; kurangi di musim hujan.",
+          "Lap daun dengan kain lembap supaya tetap mengkilap.",
+        ),
+        mk(
+          13,
+          "orchid",
+          "Anggrek Bulan",
+          "Phalaenopsis amabilis",
+          210000,
+          "Sedang",
+          "Sedang",
+          "Sulit",
+          ["flowering", "indoor"],
+          68,
+          4.5,
+          47,
+          8,
+          "40–60 cm",
+          "bunga koleksi hadiah",
+          "Anggrek dengan bunga putih lebar yang mekar berbulan-bulan, cocok sebagai hadiah.",
+          "Sekali seminggu dengan cara merendam akar 10 menit.",
+          "Jangan siram ke tengah daun. Pindahkan ke tempat sejuk untuk memicu bunga baru.",
+        ),
+        mk(
+          14,
+          "jade",
+          "Jade Plant",
+          "Crassula ovata",
+          65000,
+          "Kecil",
+          "Terang",
+          "Mudah",
+          ["succulent", "small"],
+          62,
+          4.6,
+          39,
+          22,
+          "20–35 cm",
+          "sukulen meja bonsai",
+          "Sukulen berdaun bulat tebal yang dipercaya membawa keberuntungan.",
+          "Dua minggu sekali saat tanah kering total.",
+          "Berikan sinar matahari pagi agar daunnya tebal dan tepinya kemerahan.",
+        ),
+      ];
+      const PBY = (id) => P.find((p) => p.id === id);
+      const CATS = [
+        ["indoor", "Indoor", "zz"],
+        ["outdoor", "Outdoor", "palm"],
+        ["hanging", "Hanging", "pothos"],
+        ["succulent", "Succulent", "aloe"],
+        ["herbal", "Herbal", "basil"],
+        ["flowering", "Flowering", "lily"],
+        ["large", "Large", "rubber"],
+        ["small", "Small", "cactus"],
+      ];
+      const CATL = Object.fromEntries(CATS.map((c) => [c[0], c[1]]));
+      const SHIP = {
+        reg: { n: "Reguler", d: "JNE · estimasi 2–4 hari", p: 15000 },
+        exp: { n: "Same-day", d: "Kurir instan · tiba hari ini", p: 30000 },
+        eco: { n: "Hemat", d: "Kargo · estimasi 4–7 hari", p: 9000 },
+      };
+      const PAYG = [
+        [
+          "Instan",
+          [
+            [
+              "qris",
+              "QRIS",
+              "Semua e-wallet & mobile banking",
+              0,
+              "QRIS",
+              "qris",
+            ],
+          ],
+        ],
+        [
+          "Virtual Account",
+          [
+            [
+              "bca",
+              "BCA Virtual Account",
+              "Cek otomatis",
+              2500,
+              "BCA",
+              "va",
+              "39358",
+            ],
+            [
+              "mandiri",
+              "Mandiri Virtual Account",
+              "Cek otomatis",
+              2500,
+              "MDR",
+              "va",
+              "88608",
+            ],
+            [
+              "bni",
+              "BNI Virtual Account",
+              "Cek otomatis",
+              2500,
+              "BNI",
+              "va",
+              "8277",
+            ],
+          ],
+        ],
+        [
+          "E-Wallet",
+          [
+            ["gopay", "GoPay", "Bayar lewat aplikasi Gojek", 0, "GP", "ew"],
+            ["ovo", "OVO", "Bayar lewat aplikasi OVO", 0, "OVO", "ew"],
+            ["dana", "DANA", "Bayar lewat aplikasi DANA", 0, "DNA", "ew"],
+          ],
+        ],
+        [
+          "Bayar di tempat",
+          [["cod", "COD", "Bayar tunai ke kurir", 5000, "COD", "cod"]],
+        ],
+      ];
+      const PM = {};
+      PAYG.forEach((g) =>
+        g[1].forEach(
+          (m) =>
+            (PM[m[0]] = {
+              id: m[0],
+              n: m[1],
+              d: m[2],
+              fee: m[3],
+              b: m[4],
+              type: m[5],
+              code: m[6],
+            }),
+        ),
+      );
+
+      /* ---------- state ---------- */
+      const defF = () => ({
+        max: 500000,
+        size: [],
+        light: [],
+        care: [],
+        sort: "pop",
+      });
+      const S = {
+        stack: [{ n: "home" }],
+        cart: [],
+        fav: new Set([1]),
+        q: "",
+        cat: null,
+        showSearch: false,
+        F: defF(),
+        D: null,
+        page: 1,
+        prefs: { place: "Indoor", care: "Mudah", light: "Sedang" },
+        PD: null,
+        sheet: null,
+        dtab: "Deskripsi",
+        open: {},
+        thumb: 0,
+        orders: [],
+        form: {
+          name: "Budi Santoso",
+          phone: "0812-3456-7890",
+          addr: "Jl. Melati No. 12, Kebayoran Baru, Jakarta Selatan",
+        },
+        ship: "reg",
+        pay: "qris",
+        voucher: "",
+        vOK: false,
+        proc: false,
+        errs: {},
+        qty: 1,
+      };
+      const cur = () => S.stack[S.stack.length - 1];
+      const isDark = () => {
+        const t = document.documentElement.dataset.theme;
+        return (
+          t === "dark" ||
+          (t !== "light" && matchMedia("(prefers-color-scheme: dark)").matches)
+        );
+      };
+      const lampBtn = () => {
+        const d = isDark();
+        return `<button class="ib lamp ${d ? "" : "lit"}" data-a="theme" aria-label="${d ? "Nyalakan mode terang" : "Matikan lampu (mode gelap)"}" title="${d ? "Mode terang" : "Mode gelap"}" aria-pressed="${d}">${ic("bulb", 22, d ? "none" : "#F2C94C")}</button>`;
+      };
+      const cartCount = () => S.cart.reduce((a, c) => a + c.q, 0);
+      const lightTxt = (l) => "Cahaya " + l.toLowerCase();
+      const sizeRange = {
+        Kecil: "< 30 cm",
+        Sedang: "30–100 cm",
+        Besar: "≥ 100 cm",
+      };
+
+      function score(p) {
+        return (
+          (p.tags.includes(S.prefs.place.toLowerCase()) ? 2 : 0) +
+          (p.care === S.prefs.care ? 2 : 0) +
+          (p.light === S.prefs.light ? 1 : 0)
+        );
+      }
+      function recs() {
+        return [...P].sort((a, b) => score(b) - score(a) || b.pop - a.pop);
+      }
+      function filtered() {
+        const F = S.F,
+          q = S.q.trim().toLowerCase();
+        let r = P.filter((p) => {
+          if (S.cat && !p.tags.includes(S.cat)) return false;
+          if (
+            q &&
+            !(p.name + " " + p.latin + " " + p.tags.join(" ") + " " + p.kw)
+              .toLowerCase()
+              .includes(q)
+          )
+            return false;
+          if (F.max < 500000 && p.price > F.max) return false;
+          if (F.size.length && !F.size.includes(p.size)) return false;
+          if (F.light.length && !F.light.includes(p.light)) return false;
+          if (F.care.length && !F.care.includes(p.care)) return false;
+          return true;
+        });
+        if (F.sort === "asc") r.sort((a, b) => a.price - b.price);
+        else if (F.sort === "desc") r.sort((a, b) => b.price - a.price);
+        else r.sort((a, b) => b.pop - a.pop);
+        return r;
+      }
+      function calc() {
+        const sub = S.cart.reduce((a, c) => a + PBY(c.id).price * c.q, 0);
+        const ship = sub ? SHIP[S.ship].p : 0,
+          disc = S.vOK ? Math.round(sub * 0.1) : 0,
+          fee = PM[S.pay].fee;
+        return { sub, ship, disc, fee, total: sub + ship - disc + fee };
+      }
+
+      /* ---------- components ---------- */
+      const attrs = (p) =>
+        `<div class="at"><div>${ic("size", 15)}${p.size}</div><div>${ic("sun", 15)}${lightTxt(p.light)}</div><div>${ic("leafi", 15)}${p.care}</div></div>`;
+      const heartBtn = (p) =>
+        `<button class="hb ${S.fav.has(p.id) ? "on" : ""}" data-a="fav" data-id="${p.id}" aria-label="Favorit">${ic("heart", 16, S.fav.has(p.id) ? "currentColor" : "none")}</button>`;
+      const card = (p) =>
+        `<div class="pc" data-a="open" data-id="${p.id}" tabindex="0"><div class="pimg">${art(p.kind)}${heartBtn(p)}</div><div class="pb"><div class="pn">${p.name}</div><div class="pp">${rp(p.price)}</div>${attrs(p)}</div></div>`;
+      const bagBtn = () =>
+        `<button class="ib" data-a="cart" aria-label="Keranjang">${ic("bag")}${cartCount() ? `<span class="badge">${cartCount()}</span>` : ""}</button>`;
+      const header = (title, right = "") =>
+        `<div class="hd"><button class="ib" data-a="back" aria-label="Kembali">${ic("back")}</button><h1>${title}</h1>${right}</div>`;
+      const empty = (icon, t, p, btn = "") =>
+        `<div class="empty"><div class="ei">${ic(icon, 28)}</div><h3>${t}</h3><p>${p}</p>${btn}</div>`;
+
+      /* ---------- screens ---------- */
+      const V = {};
+      V.home = () => {
+        const top = recs().slice(0, 5);
+        return `<div class="hd mob"><div class="logo">${ic("leafi", 26)}Greeny</div><div class="hi">${lampBtn()}<button class="ib" data-a="search" aria-label="Cari">${ic("search")}</button><button class="ib" data-a="tab" data-v="fav" aria-label="Favorit">${ic("heart")}</button>${bagBtn()}</div></div>
+ <div class="hero"><div class="t"><h3>Bring More Green Into Your Life</h3><p>Temukan tanaman yang tepat untuk rumah dan gayamu.</p><button class="btn sm herob" data-a="cat" data-v="all">Lihat semua tanaman</button></div><div class="a"><div class="m1">${art("lily", "10 0 90 100", false)}</div><div class="trio"><div class="tw" style="flex:1">${art("snake")}</div><div class="tw" style="flex:1.35">${art("monstera")}</div><div class="tw" style="flex:1">${art("lily")}</div></div></div></div>
+ <div class="sbox m-only">${ic("search", 18)}<input data-m="hq" placeholder="Cari tanaman, jenis, atau kebutuhan..." aria-label="Cari tanaman"></div>
+ <div class="sec"><h2>Kategori</h2><button class="link" data-a="tab" data-v="kategori">Lihat semua</button></div>
+ <div class="cats">${CATS.map((c) => `<button class="cat" data-a="cat" data-v="${c[0]}"><div class="cim">${art(c[2], "18 18 64 80", false)}</div>${c[1]}</button>`).join("")}</div>
+ <div class="sec"><h2>Rekomendasi untuk Kamu</h2><button class="link" data-a="rec">Lihat semua</button></div>
+ <div class="hs">${top.map((p) => `<div class="mini" data-a="open" data-id="${p.id}" role="button" tabindex="0"><div class="pimg">${art(p.kind)}</div><div class="pb"><div class="pn">${p.name}</div><div class="pp">${rp(p.price)}</div></div></div>`).join("")}</div>`;
+      };
+      V.kategori =
+        () => `<div class="hd"><h1>Kategori</h1><div class="hi">${lampBtn()}<button class="ib" data-a="search">${ic("search")}</button>${bagBtn()}</div></div>
+ <div class="rlist"><button class="row" data-a="cat" data-v="all"><div class="pimg" style="display:grid;place-items:center;color:var(--brand)">${ic("grid", 30)}</div><div class="in"><div class="pn">Semua tanaman</div><div class="muted" style="font-size:12px">${P.length} tanaman tersedia</div></div>${ic("chevr", 18)}</button>
+ ${CATS.map((c) => `<button class="row" data-a="cat" data-v="${c[0]}"><div class="pimg">${art(c[2])}</div><div class="in"><div class="pn">${c[1]}</div><div class="muted" style="font-size:12px">${P.filter((p) => p.tags.includes(c[0])).length} tanaman</div></div>${ic("chevr", 18)}</button>`).join("")}</div>`;
+
+      function chipsHTML() {
+        const F = S.F,
+          c = [];
+        if (F.max < 500000) c.push(["max", "", `Harga ≤ ${rp(F.max)}`]);
+        if (S.cat) c.push(["cat", "", CATL[S.cat]]);
+        F.size.forEach((v) => c.push(["size", v, "Ukuran " + v.toLowerCase()]));
+        F.light.forEach((v) => c.push(["light", v, lightTxt(v)]));
+        F.care.forEach((v) =>
+          c.push(["care", v, "Perawatan " + v.toLowerCase()]),
+        );
+        return c.length
+          ? `<div class="chips">${c.map((x) => `<span class="chip">${x[2]}<button data-a="rmchip" data-k="${x[0]}" data-v="${x[1]}" aria-label="Hapus filter">${ic("close", 14)}</button></span>`).join("")}</div>`
+          : "";
+      }
+      const isDesk = () => matchMedia("(min-width:900px)").matches;
+      function gridHTML() {
+        const r = filtered(),
+          per = isDesk() ? 8 : 4,
+          pages = Math.max(1, Math.ceil(r.length / per));
+        if (S.page > pages) S.page = pages;
+        const items = r.slice((S.page - 1) * per, S.page * per);
+        if (!r.length)
+          return empty(
+            "search",
+            "Tanaman tidak ditemukan",
+            "Coba kata kunci lain atau kurangi filter yang aktif.",
+            `<button class="btn sm" data-a="resetall">Hapus semua filter</button>`,
+          );
+        return `<div class="muted" style="font-size:12px;margin:14px 0 10px">${r.length} tanaman</div><div class="grid">${items.map(card).join("")}</div>
+ ${pages > 1 ? `<div class="pager"><button data-a="pg" data-v="${S.page - 1}" ${S.page === 1 ? "disabled" : ""} aria-label="Sebelumnya">${ic("chevl", 18)}</button>${Array.from({ length: pages }, (_, i) => `<button class="${S.page === i + 1 ? "on" : ""}" data-a="pg" data-v="${i + 1}">${i + 1}</button>`).join("")}<button data-a="pg" data-v="${S.page + 1}" ${S.page === pages ? "disabled" : ""} aria-label="Berikutnya">${ic("chevr", 18)}</button></div>` : ""}`;
+      }
+      V.list =
+        () => `${header(S.cat ? CATL[S.cat] : "Tanaman", `<div class="hi">${lampBtn()}<button class="ib" data-a="togsearch" aria-label="Cari">${ic("search")}</button>${bagBtn()}</div>`)}
+ ${S.showSearch ? `<div class="sbox m-only" style="margin:0 0 12px"><span>${ic("search", 18)}</span><input data-m="q" value="${S.q.replace(/"/g, "&quot;")}" placeholder="Cari tanaman, jenis, atau kebutuhan..." aria-label="Cari"></div>` : ""}
+ <div class="lgrid"><aside class="side"><div class="sidehd"><h2>Filter</h2><button class="link" data-a="freset">Reset</button></div>${filterGroups(S.F, true)}</aside>
+ <div class="lmain"><div class="fs"><button data-a="openfilter">${ic("filter", 17)}Filter</button><button data-a="opensort">${ic("sort", 17)}Urutkan</button></div>
+ <div id="chipwrap">${chipsHTML()}</div><div id="gridwrap">${gridHTML()}</div></div></div>`;
+
+      V.detail = (c) => {
+        const p = PBY(c.id),
+          vbs = ["0 0 100 100", "12 -2 76 76", "22 38 56 62"];
+        const acc = [
+          ["Deskripsi", p.desc],
+          ["Kebutuhan Cahaya", LIGHT_T[p.light]],
+          ["Frekuensi Penyiraman", p.water],
+          ["Tips Perawatan", p.tips],
+          [
+            "Tersedia di",
+            `Greeny Store Jakarta Selatan — stok ${p.stock}<br>Greeny Store Surabaya — stok ${Math.max(2, p.stock - 6)}<br>Gudang online — dikirim ke seluruh Indonesia`,
+          ],
+        ];
+        return `<button class="crumb" data-a="back">${ic("back", 16)}Kembali</button>
+ <div class="dgrid"><div class="gal"><div class="dimg">${art(p.kind, vbs[S.thumb])}<div class="dtop"><button class="rb bk" data-a="back" aria-label="Kembali">${ic("back", 18)}</button><div style="display:flex;gap:8px;margin-left:auto"><button class="rb ${S.fav.has(p.id) ? "on" : ""}" data-a="fav" data-id="${p.id}" aria-label="Favorit">${ic("heart", 17, S.fav.has(p.id) ? "currentColor" : "none")}</button><button class="rb" data-a="share" aria-label="Bagikan">${ic("share", 17)}</button></div></div></div>
+ <div class="thumbs">${vbs.map((v, i) => `<button class="${S.thumb === i ? "on" : ""}" data-a="thumb" data-v="${i}" aria-label="Foto ${i + 1}">${art(p.kind, v)}</button>`).join("")}</div></div>
+ <div class="info"><h1 style="font-size:20px;margin:0;font-weight:800">${p.name}</h1><div class="price">${rp(p.price)}</div><div class="stars">${ic("star", 14, "currentColor")}<b style="color:var(--ink)">${p.rate}</b> (${p.rev} ulasan)</div>
+ <div class="attrs"><div>${ic("size", 24)}<span>Ukuran<b>${p.size}</b>(${sizeRange[p.size]})</span></div><div>${ic("sun", 24)}<span>Cahaya<b>${p.light}</b></span></div><div>${ic("leafi", 24)}<span>Perawatan<b>${p.care}</b></span></div></div>
+ <div class="qrow"><span class="qlabel">Jumlah</span><div class="qty"><button data-a="qdec" data-id="${p.id}" aria-label="Kurangi jumlah" ${S.qty <= 1 ? "disabled" : ""}>${ic("minus", 14)}</button><span aria-live="polite">${S.qty}</span><button data-a="qinc" data-id="${p.id}" aria-label="Tambah jumlah" ${S.qty >= p.stock ? "disabled" : ""}>${ic("plus", 14)}</button></div><span class="muted" style="font-size:12px">Stok ${p.stock}</span><b class="qtot">${rp(p.price * S.qty)}</b></div>
+ <div style="display:grid;grid-template-columns:1fr auto;gap:10px"><button class="btn" data-a="add" data-id="${p.id}">${ic("bag", 18)}Tambah ke Keranjang</button><button class="btn ghost" style="width:auto;padding:0 20px" data-a="buy" data-id="${p.id}">Beli</button></div>
+ <div class="tabs">${["Deskripsi", "Detail Lengkap"].map((t) => `<button class="${S.dtab === t ? "on" : ""}" data-a="dtab" data-v="${t}">${t}</button>`).join("")}</div>
+ <div style="padding:12px 0 4px;color:var(--muted);font-size:13px">${S.dtab === "Deskripsi" ? p.desc : `<table class="dt"><tr><td>Nama latin</td><td><i>${p.latin}</i></td></tr><tr><td>Tinggi</td><td>${p.height}</td></tr><tr><td>Ukuran</td><td>${p.size} (${sizeRange[p.size]})</td></tr><tr><td>Pot</td><td>Pot keramik krem</td></tr><tr><td>Garansi</td><td>7 hari tanaman sampai hidup</td></tr></table>`}</div>
+ <div class="gl" style="margin-top:18px">Informasi Tambahan</div>
+ <div class="acc">${acc.map(([t, b]) => `<button class="ah ${S.open[t] ? "on" : ""}" data-a="acc" data-v="${t}" aria-expanded="${!!S.open[t]}">${t}${ic("chev", 18)}</button>${S.open[t] ? `<div class="ab">${b}</div>` : ""}`).join("")}</div></div></div>`;
+      };
+
+      V.rec = () => {
+        const r = recs().slice(0, 6);
+        return `<div class="hd mob"><div class="logo">${ic("leafi", 26)}Greeny</div><div class="hi">${lampBtn()}<button class="ib" data-a="search">${ic("search")}</button>${bagBtn()}</div></div>
+ <h1 class="ptitle">Rekomendasi untuk Kamu</h1><div class="muted" style="font-size:12.5px;margin-bottom:14px">Berdasarkan preferensi dan kondisi lingkunganmu</div>
+ <div class="box"><div class="prefc"><div class="lf">${ic("leafi", 24)}</div><div style="font-size:12.5px;flex:1">Kamu menyukai tanaman <b>${S.prefs.place}</b> dengan perawatan <b>${S.prefs.care.toLowerCase()}</b> dan cahaya <b>${S.prefs.light.toLowerCase()}</b>.</div><button class="btn sm dskbtn" data-a="editpref">Ubah Preferensi</button></div><button class="btn sm mobbtn" style="margin-top:12px" data-a="editpref">Ubah Preferensi</button></div>
+ <div class="sec"><h2>Pilihan Terbaik untuk Kamu</h2></div>
+ <div class="rlist">${r.map((p) => `<button class="row" data-a="open" data-id="${p.id}"><div class="pimg">${art(p.kind)}</div><div class="in"><div class="pn">${p.name}<span class="match">Cocok ${Math.round((score(p) / 5) * 100)}%</span></div><div class="pp">${rp(p.price)}</div>${attrs(p)}</div>${ic("chevr", 18)}</button>`).join("")}</div>`;
+      };
+      V.fav = () => {
+        const l = P.filter((p) => S.fav.has(p.id));
+        return `<div class="hd"><h1>Favorit</h1><div class="hi">${lampBtn()}${bagBtn()}</div></div>${l.length ? `<div class="grid">${l.map(card).join("")}</div>` : empty("heart", "Belum ada favorit", "Ketuk ikon hati pada tanaman yang kamu suka untuk menyimpannya di sini.", `<button class="btn sm" data-a="tab" data-v="home">Cari tanaman</button>`)}`;
+      };
+      V.akun =
+        () => `<div class="hd"><h1>Akun</h1><div class="hi">${lampBtn()}${bagBtn()}</div></div>
+ <div class="box prefc"><div class="lf" style="width:52px;height:52px">${ic("user", 26)}</div><div><b>${S.form.name || "Pengguna Greeny"}</b><div class="muted" style="font-size:12px">${S.form.phone}</div></div></div>
+ <div class="box" style="margin-top:12px"><div style="display:flex;justify-content:space-between;align-items:center"><b>Preferensi tanaman</b><button class="link" style="color:var(--brand);font-weight:700" data-a="editpref">Ubah</button></div><div class="muted" style="font-size:12.5px;margin-top:4px">${S.prefs.place} · perawatan ${S.prefs.care.toLowerCase()} · cahaya ${S.prefs.light.toLowerCase()}</div></div>
+ <div class="sec"><h2>Pesanan Saya</h2></div>
+ ${S.orders.length ? S.orders.map((o) => `<div class="box" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:13px">${o.id}</b><span class="status ${o.paid ? "g" : "w"}">${o.paid ? "Dikemas" : o.method === "cod" ? "Dikemas" : "Menunggu pembayaran"}</span></div><div class="muted" style="font-size:12.5px;margin:6px 0">${o.items.map((i) => PBY(i.id).name + " ×" + i.q).join(", ")}</div><div style="display:flex;justify-content:space-between;align-items:center"><b>${rp(o.total)}</b>${!o.paid && o.method !== "cod" ? `<button class="btn sm" data-a="payorder" data-id="${o.id}">Bayar</button>` : ""}</div></div>`).join("") : empty("box", "Belum ada pesanan", "Pesanan yang kamu buat akan muncul di sini.")}`;
+
+      V.cart = () => {
+        if (!S.cart.length)
+          return (
+            header("Keranjang") +
+            empty(
+              "bag",
+              "Keranjangmu masih kosong",
+              "Pilih tanaman favoritmu dan tambahkan ke keranjang.",
+              `<button class="btn sm" data-a="tab" data-v="home">Mulai belanja</button>`,
+            )
+          );
+        const c = calc();
+        return (
+          header("Keranjang") +
+          `<div class="two"><div class="main">` +
+          S.cart
+            .map((i) => {
+              const p = PBY(i.id);
+              return `<div class="ci"><div class="pimg">${art(p.kind)}</div><div class="in"><div><div class="pn">${p.name}</div><div class="muted" style="font-size:12px">${p.size} · ${lightTxt(p.light)}</div></div><div style="display:flex;justify-content:space-between;align-items:center"><b>${rp(p.price * i.q)}</b><div style="display:flex;align-items:center;gap:6px"><div class="qty"><button data-a="dec" data-id="${p.id}" aria-label="Kurangi">${ic("minus", 14)}</button><span>${i.q}</span><button data-a="inc" data-id="${p.id}" aria-label="Tambah">${ic("plus", 14)}</button></div><button class="ib" style="width:32px;height:32px;color:var(--heart)" data-a="rm" data-id="${p.id}" aria-label="Hapus">${ic("trash", 17)}</button></div></div></div></div>`;
+            })
+            .join("") +
+          `</div><div class="aside"><div class="gl asidegl">Ringkasan belanja</div><div class="box sum" style="margin-top:6px"><div><span class="muted">Subtotal (${cartCount()} barang)</span><b>${rp(c.sub)}</b></div><div class="muted" style="font-size:12px;display:block">Ongkir dan voucher dihitung di langkah berikutnya.</div></div>
+ <div class="stick"><button class="btn" data-a="checkout">Lanjut ke Checkout · ${rp(c.sub)}</button></div></div></div>`
+        );
+      };
+
+      V.checkout = () => {
+        const c = calc(),
+          E = S.errs;
+        return (
+          header("Checkout") +
+          `<div class="two"><div class="main">
+ <div class="gl" style="margin-top:4px">Alamat pengiriman</div>
+ <div class="box"><div class="fld"><label>Nama penerima</label><input data-m="name" class="${E.name ? "err" : ""}" value="${S.form.name}"></div><div class="fld"><label>Nomor telepon</label><input data-m="phone" inputmode="tel" class="${E.phone ? "err" : ""}" value="${S.form.phone}"></div><div class="fld" style="margin:0"><label>Alamat lengkap</label><input data-m="addr" class="${E.addr ? "err" : ""}" value="${S.form.addr}"></div></div>
+ <div class="gl">Pesanan</div>
+ <div class="box">${S.cart
+   .map((i) => {
+     const p = PBY(i.id);
+     return `<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><div class="pimg" style="width:44px;height:44px;border-radius:10px;flex:none">${art(p.kind)}</div><div style="flex:1;font-size:13px"><b>${p.name}</b><div class="muted" style="font-size:12px">${i.q} × ${rp(p.price)}</div></div><b style="font-size:13px">${rp(p.price * i.q)}</b></div>`;
+   })
+   .join("")}</div>
+ <div class="gl">Metode pengiriman</div>
+ ${Object.entries(SHIP)
+   .map(
+     ([k, s]) =>
+       `<button class="choice ${S.ship === k ? "on" : ""}" data-a="ship" data-v="${k}"><span class="rd"></span><span class="badge2">${ic("truck", 18)}</span><span class="ct"><b>${s.n}</b><small>${s.d}</small></span><span class="pr">${rp(s.p)}</span></button>`,
+   )
+   .join("")}
+ <div class="gl">Voucher</div>
+ <div class="vrow"><input data-m="voucher" value="${S.voucher}" placeholder="Coba kode GREENY10" aria-label="Kode voucher"><button class="btn sm" data-a="voucher">Pakai</button></div>
+ ${S.vOK ? `<div class="disc" style="font-size:12px;margin-top:6px">Voucher GREENY10 dipakai — diskon 10%.</div>` : ""}
+ <div class="gl">Metode pembayaran</div>
+ ${PAYG.map((g) => `<div class="muted" style="font-size:11.5px;margin:10px 0 6px">${g[0]}</div>` + g[1].map((m) => `<button class="choice ${S.pay === m[0] ? "on" : ""}" data-a="pay" data-v="${m[0]}"><span class="rd"></span><span class="badge2">${m[4]}</span><span class="ct"><b>${m[1]}</b><small>${m[2]}</small></span>${m[3] ? `<span class="pr">+${rp(m[3])}</span>` : ""}</button>`).join("")).join("")}
+ </div><div class="aside"><div class="gl asidegl">Ringkasan pembayaran</div>
+ <div class="box sum" style="margin-top:6px"><div><span class="muted">Subtotal</span><span>${rp(c.sub)}</span></div><div><span class="muted">Ongkos kirim</span><span>${rp(c.ship)}</span></div>${c.disc ? `<div class="disc"><span>Diskon voucher</span><span>−${rp(c.disc)}</span></div>` : ""}${c.fee ? `<div><span class="muted">Biaya layanan</span><span>${rp(c.fee)}</span></div>` : ""}<div class="tot"><span>Total</span><span>${rp(c.total)}</span></div></div>
+ <div class="stick"><button class="btn" data-a="placeorder">${S.pay === "cod" ? "Buat Pesanan" : "Bayar Sekarang"} · ${rp(c.total)}</button></div></div></div>`
+        );
+      };
+
+      function qrSVG(seed) {
+        let s = seed;
+        const r = () => {
+          s = (s * 1664525 + 1013904223) % 4294967296;
+          return s / 4294967296;
+        };
+        const n = 25;
+        let o = "";
+        const fin = (x, y) =>
+          `<rect x="${x}" y="${y}" width="7" height="7" fill="currentColor"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="currentColor"/>`;
+        for (let y = 0; y < n; y++)
+          for (let x = 0; x < n; x++) {
+            if ((x < 8 && y < 8) || (x > 16 && y < 8) || (x < 8 && y > 16))
+              continue;
+            if (r() > 0.52)
+              o += `<rect x="${x}" y="${y}" width="1" height="1" fill="currentColor"/>`;
+          }
+        return `<svg viewBox="0 0 25 25" shape-rendering="crispEdges" role="img" aria-label="Kode QRIS">${o}${fin(0, 0)}${fin(18, 0)}${fin(0, 18)}</svg>`;
+      }
+      const pad = (n) => String(n).padStart(2, "0");
+      function cdText(o) {
+        const ms = o.exp - Date.now();
+        if (ms <= 0) return "00:00:00";
+        const t = Math.floor(ms / 1000);
+        return `${pad(Math.floor(t / 3600))}:${pad(Math.floor((t % 3600) / 60))}:${pad(t % 60)}`;
+      }
+
+      V.payment = (c) => {
+        const o = S.orders.find((x) => x.id === c.oid),
+          m = PM[o.method];
+        let body = "";
+        if (m.type === "qris")
+          body = `<p class="muted ctr" style="font-size:12.5px;margin:18px 0 12px">Pindai kode QR dengan aplikasi e-wallet atau mobile banking apa pun.</p><div class="qrb">${qrSVG(o.seed)}<div class="ctr" style="font-size:11px;font-weight:700;margin-top:6px">GREENY PLANT STORE</div></div>`;
+        else if (m.type === "va") {
+          const no = m.code + "0812" + String(o.seed).slice(-8);
+          body = `<div class="box" style="margin-top:16px"><div class="muted" style="font-size:12px">Nomor Virtual Account ${m.n.split(" ")[0]}</div><div class="vano" style="margin:6px 0 10px">${no}</div><button class="btn ghost sm" data-a="copy" data-v="${no}">${ic("copy", 15)}Salin nomor</button></div>
+  <div class="acc" style="margin-top:12px"><button class="ah ${S.open.va ? "on" : ""}" data-a="acc" data-v="va">Cara pembayaran${ic("chev", 18)}</button>${S.open.va ? `<div class="ab"><ol style="margin:0;padding-left:18px;display:grid;gap:4px"><li>Buka aplikasi mobile banking atau ATM.</li><li>Pilih menu Transfer → Virtual Account.</li><li>Masukkan nomor di atas dan cek nominalnya.</li><li>Konfirmasi dengan PIN, lalu kembali ke sini.</li></ol></div>` : ""}</div>`;
+        } else if (m.type === "ew")
+          body = `<div class="box ctr" style="margin-top:16px"><div class="badge2" style="margin:0 auto 10px;width:56px;height:56px;border-radius:14px;font-size:13px;background:var(--brand-soft);color:var(--brand)">${m.b}</div><b>Buka aplikasi ${m.n}</b><p class="muted" style="font-size:12.5px;margin:6px 0 0">Kami sudah mengirim permintaan pembayaran ke nomor ${S.form.phone}. Setujui di aplikasi untuk menyelesaikan pembayaran.</p></div>`;
+        return (
+          header("Pembayaran") +
+          `<div class="cd"><span>Selesaikan pembayaran dalam</span><b id="cd">${cdText(o)}</b></div>
+ <div class="ctr" style="margin:18px 0 2px"><div class="muted" style="font-size:12px">Total pembayaran · ${o.id}</div><div class="big">${rp(o.total)}</div><div style="font-size:12.5px;margin-top:2px">via <b>${m.n}</b></div></div>
+ ${body}
+ <div class="stick" style="display:grid;gap:8px"><button class="btn" data-a="paid" data-id="${o.id}">${m.type === "ew" ? "Saya sudah menyetujui di aplikasi" : "Saya sudah bayar"}</button><button class="btn ghost" data-a="changepay" data-id="${o.id}">Lihat pesanan di Akun</button></div>`
+        );
+      };
+      V.success = (c) => {
+        const o = S.orders.find((x) => x.id === c.oid),
+          cod = o.method === "cod";
+        return `<div class="ctr"><div class="okc">${ic("check", 44)}</div><h1 style="font-size:21px;font-weight:800;margin:0 0 4px">${cod ? "Pesanan berhasil dibuat" : "Pembayaran berhasil"}</h1><div class="muted" style="font-size:13px">Terima kasih, ${S.form.name.split(" ")[0]}! Tanamanmu segera kami kemas.</div></div>
+ <div class="box sum" style="margin-top:20px"><div><span class="muted">Nomor pesanan</span><b>${o.id}</b></div><div><span class="muted">Metode</span><span>${PM[o.method].n}</span></div><div><span class="muted">Pengiriman</span><span>${SHIP[o.ship].n}</span></div><div class="tot"><span>${cod ? "Bayar ke kurir" : "Total dibayar"}</span><span>${rp(o.total)}</span></div></div>
+ <div class="gl">Status pesanan</div><div class="box tl"><div><i class="on"></i><span><b>${cod ? "Pesanan dibuat" : "Pembayaran diterima"}</b><br><small class="muted">Baru saja</small></span></div><div><i class="on"></i><span><b>Dikemas</b><br><small class="muted">Tanaman dibungkus aman dengan pelindung daun</small></span></div><div><i></i><span><b>Dikirim</b><br><small class="muted">Estimasi ${SHIP[o.ship].d.split("· ")[1]}</small></span></div><div><i></i><span><b>Diterima</b></span></div></div>
+ <div style="display:grid;gap:8px;margin-top:20px"><button class="btn" data-a="tab" data-v="home">Kembali belanja</button><button class="btn ghost" data-a="tab" data-v="akun">Lihat pesanan saya</button></div>`;
+      };
+
+      /* ---------- sheets ---------- */
+      const filterGroups = (D, live) => {
+        const o = (g, v, l) =>
+          `<button class="opt ${D[g].includes(v) ? "on" : ""}" data-a="${live ? "fchk" : "chk"}" data-g="${g}" data-v="${v}"><span class="cb">${D[g].includes(v) ? ic("check", 13) : ""}</span>${l}</button>`;
+        const so = (v, l) =>
+          `<button class="opt ${D.sort === v ? "on" : ""}" data-a="${live ? "fsort" : "dsort"}" data-v="${v}"><span class="rd"></span>${l}</button>`;
+        const id = live ? "fmaxlbl" : "maxlbl";
+        return `<div class="grp"><h4>Harga</h4><input type="range" min="0" max="500000" step="5000" value="${D.max}" data-m="${live ? "fmax" : "max"}" aria-label="Harga maksimum"><div class="rng"><span>Rp 0</span><span id="${id}">${rp(D.max)}${D.max >= 500000 ? "+" : ""}</span></div></div>
+ <div class="grp"><h4>Ukuran</h4>${o("size", "Kecil", "Kecil (< 30 cm)")}${o("size", "Sedang", "Sedang (30–100 cm)")}${o("size", "Besar", "Besar (≥ 100 cm)")}</div>
+ <div class="grp"><h4>Kebutuhan Cahaya</h4>${o("light", "Rendah", "Cahaya rendah")}${o("light", "Sedang", "Cahaya sedang")}${o("light", "Terang", "Cahaya terang")}</div>
+ <div class="grp"><h4>Tingkat Perawatan</h4>${o("care", "Mudah", "Mudah")}${o("care", "Sedang", "Sedang")}${o("care", "Sulit", "Sulit")}</div>
+ <div class="grp"><h4>Urutkan berdasarkan</h4>${so("asc", "Harga (terendah–tertinggi)")}${so("desc", "Harga (tertinggi–terendah)")}${so("pop", "Popularitas")}</div>`;
+      };
+      function filterSheet() {
+        return `<div class="sheet" role="dialog" aria-label="Filter"><div class="sh"><h2>Filter</h2><button class="ib" data-a="closesheet" aria-label="Tutup">${ic("close")}</button></div><div class="sbody" id="sbody">${filterGroups(S.D, false)}</div>
+ <div class="sfoot"><button class="btn ghost" style="width:auto;padding:0 18px" data-a="dreset">Reset</button><button class="btn" data-a="apply">Terapkan</button></div></div>`;
+      }
+      function sortSheet() {
+        const so = (v, l) =>
+          `<button class="opt ${S.F.sort === v ? "on" : ""}" data-a="sortnow" data-v="${v}" style="padding:12px 0"><span class="rd"></span>${l}</button>`;
+        return `<div class="sheet"><div class="sh"><h2>Urutkan</h2><button class="ib" data-a="closesheet" aria-label="Tutup">${ic("close")}</button></div><div class="sbody" style="padding-bottom:20px">${so("asc", "Harga (terendah–tertinggi)")}${so("desc", "Harga (tertinggi–terendah)")}${so("pop", "Popularitas")}</div></div>`;
+      }
+      function prefSheet() {
+        const D = S.PD,
+          g = (k, l, vals) =>
+            `<div class="grp"><h4>${l}</h4><div class="seg">${vals.map((v) => `<button class="${D[k] === v ? "on" : ""}" data-a="setpref" data-k="${k}" data-v="${v}">${v}</button>`).join("")}</div></div>`;
+        return `<div class="sheet"><div class="sh"><h2>Ubah Preferensi</h2><button class="ib" data-a="closesheet" aria-label="Tutup">${ic("close")}</button></div><div class="sbody">${g("place", "Tempat tanam", ["Indoor", "Outdoor"])}${g("care", "Tingkat perawatan", ["Mudah", "Sedang", "Sulit"])}${g("light", "Cahaya di rumahmu", ["Rendah", "Sedang", "Terang"])}</div><div class="sfoot" style="grid-template-columns:1fr"><button class="btn" data-a="savepref">Simpan preferensi</button></div></div>`;
+      }
+
+      /* ---------- render ---------- */
+      const NAVS = {
+        home: ["Home", "home"],
+        kategori: ["Kategori", "grid"],
+        fav: ["Favorit", "heart"],
+        akun: ["Akun", "user"],
+      };
+      function topbar(active) {
+        const L = [
+          ["home", "Home"],
+          ["kategori", "Kategori"],
+          ["fav", "Favorit"],
+          ["akun", "Akun"],
+        ];
+        return `<header class="top"><div class="topin"><button class="logo" data-a="tab" data-v="home">${ic("leafi", 28)}Greeny</button><nav class="tnav" aria-label="Menu utama">${L.map(([k, l]) => `<button class="${active === k ? "on" : ""}" data-a="tab" data-v="${k}">${l}</button>`).join("")}</nav>
+ <div class="sbox tsearch">${ic("search", 18)}<input data-m="hq" placeholder="Cari tanaman, jenis, atau kebutuhan..." aria-label="Cari tanaman"></div>
+ <div class="hi">${lampBtn()}<button class="ib" data-a="tab" data-v="fav" aria-label="Favorit">${ic("heart")}${S.fav.size ? `<span class="badge">${S.fav.size}</span>` : ""}</button>${bagBtn()}<button class="ib" data-a="tab" data-v="akun" aria-label="Akun">${ic("user")}</button></div></div></header>`;
+      }
+      function render(reset) {
+        const c = cur(),
+          old = $("#view"),
+          sc = old ? old.scrollTop : 0,
+          sb = $("#sbody"),
+          sbs = sb ? sb.scrollTop : 0;
+        const showNav = ["home", "kategori", "fav", "akun", "rec"].includes(
+          c.n,
+        );
+        const active =
+          c.n === "rec" ? "home" : c.n === "list" ? "kategori" : c.n;
+        const narrow = ["payment", "success", "akun"].includes(c.n);
+        const sheet = S.sheet
+          ? `<div class="ov" data-a="closesheet" id="ov"><div style="width:100%" data-stop="1">${S.sheet === "filter" ? filterSheet() : S.sheet === "sort" ? sortSheet() : prefSheet()}</div></div>`
+          : "";
+        const proc = S.proc
+          ? `<div class="proc"><div class="spin"></div>Memverifikasi pembayaran…</div>`
+          : "";
+        $("#app").innerHTML =
+          `${topbar(active)}<div class="view" id="view"><div class="wrap ${narrow ? "narrow" : ""}">${V[c.n](c)}</div></div>${
+            showNav
+              ? `<nav class="nav">${Object.entries(NAVS)
+                  .map(
+                    ([k, [l, i]]) =>
+                      `<button class="${active === k ? "on" : ""}" data-a="tab" data-v="${k}">${ic(i, 22, active === k && k === "fav" ? "currentColor" : "none")}${l}</button>`,
+                  )
+                  .join("")}</nav>`
+              : ""
+          }${sheet}${proc}`;
+        const nv = $("#view");
+        if (!reset) nv.scrollTop = sc;
+        else nv.scrollTop = 0;
+        const nsb = $("#sbody");
+        if (nsb && sb) nsb.scrollTop = sbs;
+        const ov = $("#ov");
+        if (ov)
+          ov.firstElementChild.addEventListener("click", (e) => {
+            if (!e.target.closest("[data-a]")) e.stopPropagation();
+          });
+      }
+      function go(n, p = {}) {
+        S.stack.push({ n, ...p });
+        S.sheet = null;
+        render(true);
+      }
+      function back() {
+        if (S.sheet) {
+          S.sheet = null;
+          return render();
+        }
+        if (S.stack.length > 1) {
+          S.stack.pop();
+          render(true);
+        }
+      }
+      let tt;
+      function toast(m) {
+        const t = $("#toast");
+        t.textContent = m;
+        t.classList.add("on");
+        clearTimeout(tt);
+        tt = setTimeout(() => t.classList.remove("on"), 1900);
+      }
+      function addCart(id, q = 1) {
+        const i = S.cart.find((x) => x.id === id);
+        i ? (i.q += q) : S.cart.push({ id, q });
+      }
+      const refreshList = () => {
+        $("#chipwrap").innerHTML = chipsHTML();
+        $("#gridwrap").innerHTML = gridHTML();
+      };
+
+      /* ---------- actions ---------- */
+      const A = {
+        tab: (d) => {
+          S.stack = [{ n: d.v }];
+          S.sheet = null;
+          render(true);
+        },
+        back: () => back(),
+        open: (d) => {
+          S.qty = 1;
+          S.thumb = 0;
+          S.dtab = "Deskripsi";
+          S.open = {};
+          go("detail", { id: +d.id });
+        },
+        fav: (d) => {
+          const id = +d.id;
+          S.fav.has(id)
+            ? (S.fav.delete(id), toast("Dihapus dari favorit"))
+            : (S.fav.add(id), toast("Ditambahkan ke favorit"));
+          render();
+        },
+        search: () => {
+          S.q = "";
+          S.cat = null;
+          S.F = defF();
+          S.showSearch = true;
+          S.page = 1;
+          go("list");
+        },
+        togsearch: () => {
+          S.showSearch = !S.showSearch;
+          render();
+        },
+        cat: (d) => {
+          S.cat = d.v === "all" ? null : d.v;
+          S.q = "";
+          S.F = defF();
+          S.showSearch = false;
+          S.page = 1;
+          go("list");
+        },
+        rec: () => go("rec"),
+        pg: (d) => {
+          S.page = +d.v;
+          refreshList();
+          $("#view").scrollTop = 0;
+        },
+        openfilter: () => {
+          S.D = JSON.parse(JSON.stringify(S.F));
+          S.sheet = "filter";
+          render();
+        },
+        opensort: () => {
+          S.sheet = "sort";
+          render();
+        },
+        closesheet: () => {
+          S.sheet = null;
+          render();
+        },
+        chk: (d) => {
+          const a = S.D[d.g],
+            i = a.indexOf(d.v);
+          i > -1 ? a.splice(i, 1) : a.push(d.v);
+          render();
+        },
+        dsort: (d) => {
+          S.D.sort = d.v;
+          render();
+        },
+        dreset: () => {
+          S.D = defF();
+          render();
+        },
+        fchk: (d) => {
+          const a = S.F[d.g],
+            i = a.indexOf(d.v);
+          i > -1 ? a.splice(i, 1) : a.push(d.v);
+          S.page = 1;
+          render();
+        },
+        fsort: (d) => {
+          S.F.sort = d.v;
+          S.page = 1;
+          render();
+        },
+        freset: () => {
+          S.F = defF();
+          S.cat = null;
+          S.page = 1;
+          render();
+        },
+        apply: () => {
+          S.F = S.D;
+          S.page = 1;
+          S.sheet = null;
+          render(true);
+        },
+        sortnow: (d) => {
+          S.F.sort = d.v;
+          S.page = 1;
+          S.sheet = null;
+          render(true);
+        },
+        rmchip: (d) => {
+          if (d.k === "max") S.F.max = 500000;
+          else if (d.k === "cat") S.cat = null;
+          else S.F[d.k] = S.F[d.k].filter((v) => v !== d.v);
+          S.page = 1;
+          render();
+        },
+        resetall: () => {
+          S.F = defF();
+          S.cat = null;
+          S.q = "";
+          S.page = 1;
+          render(true);
+        },
+        thumb: (d) => {
+          S.thumb = +d.v;
+          render();
+        },
+        dtab: (d) => {
+          S.dtab = d.v;
+          render();
+        },
+        acc: (d) => {
+          S.open[d.v] = !S.open[d.v];
+          render();
+        },
+        share: () => {
+          try {
+            navigator.clipboard.writeText(location.href);
+          } catch (e) {}
+          toast("Tautan produk disalin");
+        },
+        qinc: (d) => {
+          if (S.qty < PBY(+d.id).stock) S.qty++;
+          else toast("Stok maksimal tercapai");
+          render();
+        },
+        qdec: () => {
+          if (S.qty > 1) S.qty--;
+          render();
+        },
+        add: (d) => {
+          addCart(+d.id, S.qty);
+          toast(S.qty + " tanaman ditambahkan ke keranjang");
+          render();
+        },
+        buy: (d) => {
+          addCart(+d.id, S.qty);
+          go("checkout");
+        },
+        cart: () => go("cart"),
+        inc: (d) => {
+          addCart(+d.id);
+          render();
+        },
+        dec: (d) => {
+          const i = S.cart.find((x) => x.id === +d.id);
+          if (i && i.q > 1) i.q--;
+          render();
+        },
+        rm: (d) => {
+          S.cart = S.cart.filter((x) => x.id !== +d.id);
+          render();
+        },
+        checkout: () => {
+          S.errs = {};
+          go("checkout");
+        },
+        ship: (d) => {
+          S.ship = d.v;
+          render();
+        },
+        pay: (d) => {
+          S.pay = d.v;
+          render();
+        },
+        voucher: () => {
+          if (S.voucher.trim().toUpperCase() === "GREENY10") {
+            S.vOK = true;
+            toast("Voucher dipakai");
+          } else {
+            S.vOK = false;
+            toast("Kode voucher tidak valid");
+          }
+          render();
+        },
+        placeorder: () => {
+          const E = {};
+          ["name", "phone", "addr"].forEach((k) => {
+            if (!S.form[k].trim()) E[k] = 1;
+          });
+          S.errs = E;
+          if (Object.keys(E).length) {
+            toast("Lengkapi alamat pengiriman dulu");
+            render();
+            return;
+          }
+          const c = calc(),
+            cod = S.pay === "cod",
+            seed = Math.floor(Math.random() * 9e8) + 1e8;
+          const o = {
+            id: "GRN-" + String(seed).slice(0, 6),
+            seed,
+            items: S.cart.map((x) => ({ ...x })),
+            total: c.total,
+            method: S.pay,
+            ship: S.ship,
+            paid: cod,
+            exp: Date.now() + 36e5,
+          };
+          S.orders.unshift(o);
+          S.cart = [];
+          S.voucher = "";
+          S.vOK = false;
+          S.stack = cod
+            ? [{ n: "home" }, { n: "success", oid: o.id }]
+            : [{ n: "home" }, { n: "payment", oid: o.id }];
+          S.sheet = null;
+          render(true);
+        },
+        paid: (d) => {
+          S.proc = true;
+          render();
+          setTimeout(() => {
+            const o = S.orders.find((x) => x.id === d.id);
+            o.paid = true;
+            S.proc = false;
+            S.stack = [{ n: "home" }, { n: "success", oid: o.id }];
+            render(true);
+          }, 1700);
+        },
+        changepay: () => {
+          S.stack = [{ n: "akun" }];
+          render(true);
+        },
+        payorder: (d) => {
+          S.stack = [{ n: "home" }, { n: "payment", oid: d.id }];
+          render(true);
+        },
+        copy: (d) => {
+          try {
+            navigator.clipboard.writeText(d.v);
+          } catch (e) {}
+          toast("Nomor disalin");
+        },
+        editpref: () => {
+          S.PD = { ...S.prefs };
+          S.sheet = "pref";
+          render();
+        },
+        setpref: (d) => {
+          S.PD[d.k] = d.v;
+          render();
+        },
+        savepref: () => {
+          S.prefs = S.PD;
+          S.sheet = null;
+          toast("Preferensi disimpan");
+          render();
+        },
+        theme: () => {
+          document.documentElement.dataset.theme = isDark() ? "light" : "dark";
+          render();
+        },
+      };
+      document.addEventListener("click", (e) => {
+        const el = e.target.closest("[data-a]");
+        if (!el) return;
+        if (
+          el.id === "ov" &&
+          e.target.closest("[data-stop]") &&
+          !e.target.closest("[data-stop] [data-a]")
+        )
+          return;
+        const f = A[el.dataset.a];
+        if (f) f(el.dataset);
+      });
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "Enter" &&
+          e.target.dataset &&
+          e.target.dataset.m === "hq"
+        ) {
+          S.q = e.target.value;
+          S.cat = null;
+          S.F = defF();
+          S.page = 1;
+          S.showSearch = true;
+          go("list");
+        } else if (
+          (e.key === "Enter" || e.key === " ") &&
+          e.target.matches &&
+          e.target.matches("[role=button],.pc")
+        ) {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+      document.addEventListener("input", (e) => {
+        const m = e.target.dataset && e.target.dataset.m;
+        if (!m) return;
+        if (m === "fmax") {
+          S.F.max = +e.target.value;
+          $("#fmaxlbl").textContent =
+            rp(S.F.max) + (S.F.max >= 500000 ? "+" : "");
+          S.page = 1;
+          refreshList();
+        } else if (m === "max") {
+          S.D.max = +e.target.value;
+          $("#maxlbl").textContent =
+            rp(S.D.max) + (S.D.max >= 500000 ? "+" : "");
+        } else if (m === "q") {
+          S.q = e.target.value;
+          S.page = 1;
+          refreshList();
+        } else if (m === "voucher") S.voucher = e.target.value;
+        else if (m in S.form) {
+          S.form[m] = e.target.value;
+          e.target.classList.remove("err");
+        }
+      });
+      setInterval(() => {
+        const el = $("#cd");
+        if (!el) return;
+        const c = cur();
+        if (c.n !== "payment") return;
+        const o = S.orders.find((x) => x.id === c.oid);
+        if (o) el.textContent = cdText(o);
+      }, 1000);
+      matchMedia("(min-width:900px)").addEventListener("change", () =>
+        render(),
+      );
+      matchMedia("(prefers-color-scheme: dark)").addEventListener(
+        "change",
+        () => render(),
+      );
+      render(true);
+    </script>
+  </body>
+</html>
