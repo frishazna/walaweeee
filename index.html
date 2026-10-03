@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Greeny – Prototype</title>
+<style>
+:root{--bg:#eceee9;--surface:#f8f9f6;--card:#fff;--ink:#26332b;--mute:#6b786f;--line:#dde2db;--g:#5f8068;--gd:#46644f;--gl:#e3ebe2;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141916;--surface:#1b221d;--card:#222a24;--ink:#e6ece6;--mute:#93a197;--line:#323c35;--g:#7ea787;--gd:#5f8d69;--gl:#2a3a2f}}
+:root[data-theme="dark"]{--bg:#141916;--surface:#1b221d;--card:#222a24;--ink:#e6ece6;--mute:#93a197;--line:#323c35;--g:#7ea787;--gd:#5f8d69;--gl:#2a3a2f}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:14px/1.4 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center;align-items:center}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+#app{width:390px;max-width:100%;height:min(800px,100dvh,100%);background:var(--surface);position:relative;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:28px}
+@media(max-width:430px){#app{border-radius:0;border:0;height:100%}}
+.bar{display:flex;align-items:center;gap:10px;padding:14px 18px;font-weight:700;font-size:17px}
+.bar .sp{flex:1}
+.ic{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;font-size:18px}
+.ic:hover{background:var(--gl)}
+#main{flex:1 1 0;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 18px 16px}
+.bar,.tabs{flex:none}
+.hero{background:var(--gl);border-radius:16px;padding:18px;display:flex;align-items:center;gap:6px;overflow:hidden}
+.hero h1{font-size:23px;line-height:1.15}
+.hero p{font-size:12px;color:var(--mute);margin-top:8px}
+.search{display:flex;gap:8px;align-items:center;margin:14px 0;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.search input{border:0;background:none;flex:1;color:var(--ink);font:inherit;outline:none}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 10px}
+.sec h2{font-size:16px}.sec a,.link{font-size:12px;color:var(--mute);cursor:pointer}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 2px 8px;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.cat span{font-size:22px;color:var(--g)}
+.cat.on{background:var(--gl);border-color:var(--g)}
+.row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.mini{min-width:112px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:11px;text-align:left}
+.mini .im{height:92px}.mini div:last-child{padding:8px}
+.im{background:var(--gl);display:grid;place-items:end center;position:relative}
+.im svg{width:100%;height:100%}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;position:relative;display:block}
+.card .im{height:150px}
+.card .tx{padding:10px;font-size:12px}
+.card b{font-size:13px;display:block}
+.pr{font-weight:700;margin-bottom:6px;display:block}
+.m{display:flex;gap:6px;color:var(--mute);font-size:11px;margin-top:3px}.m i{font-style:normal;width:14px;color:var(--g)}
+.heart{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:15px;color:var(--g);z-index:2}
+.btn{background:var(--g);color:#fff;border-radius:10px;padding:11px 16px;font-weight:600;width:100%}
+.btn:hover{background:var(--gd)}
+.btn.sm{width:auto;padding:7px 16px;font-size:12px}
+.tabs{display:flex;border-top:1px solid var(--line);background:var(--card)}
+.tabs button{flex:1;padding:9px 0 12px;font-size:11px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:1px}
+.tabs button span{font-size:19px}.tabs .on{color:var(--g);font-weight:700}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{background:var(--gl);border-radius:20px;padding:5px 11px;font-size:12px}
+.fs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fs button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px;font-weight:600;font-size:13px}
+.sheet{position:absolute;inset:0;background:rgba(20,28,22,.35);display:flex;align-items:flex-end;z-index:5}
+.sheet>div{background:var(--card);width:100%;max-height:88%;overflow-y:auto;border-radius:20px 20px 0 0;padding:18px;animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.sheet>div{animation:none}}
+.sheet h3{font-size:16px;display:flex;justify-content:space-between;margin-bottom:6px}
+.sheet h4{font-size:13px;margin:16px 0 8px}
+.sheet label{display:flex;gap:9px;align-items:center;padding:5px 0;font-size:13px}
+input[type=range]{width:100%;accent-color:var(--g)}
+input[type=checkbox],input[type=radio]{accent-color:var(--g);width:16px;height:16px}
+.pg{display:flex;justify-content:center;gap:14px;align-items:center;margin:18px 0 4px}
+.pg button{width:28px;height:28px;border-radius:50%;color:var(--mute)}.pg .on{background:var(--g);color:#fff}
+.rec{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:10px;width:100%;text-align:left;align-items:center}
+.rec .im{width:68px;height:78px;border-radius:10px;overflow:hidden;flex:none}
+.rec>div:nth-child(2){flex:1;font-size:12px}
+.pref{background:var(--gl);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;margin:12px 0;font-size:12px}
+.pref p{margin-bottom:8px}
+.d-im{height:240px;border-radius:16px;overflow:hidden;position:relative}
+.stats{display:flex;gap:12px;margin:12px 0}
+.stats div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;font-size:11px;color:var(--mute)}
+.stats b{display:block;color:var(--ink);font-size:12px}
+.acc{border:1px solid var(--line);border-radius:12px;background:var(--card);margin-top:14px}
+.acc button{width:100%;text-align:left;padding:12px 14px;display:flex;justify-content:space-between;font-size:13px;font-weight:600}
+.acc>div{border-top:1px solid var(--line)}
+.acc p{padding:0 14px 12px;font-size:12px;color:var(--mute)}
+.toast{position:absolute;left:50%;bottom:76px;transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:20px;font-size:12px;z-index:9}
+.empty{text-align:center;color:var(--mute);padding:40px 10px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+var P=[
+{id:0,n:"Monstera Deliciosa",p:120000,s:"Sedang",sz:"Sedang (30–100 cm)",l:"Cahaya sedang",c:"Mudah",cat:["Indoor","Large"],c1:"#4f7557",r:4.8,rv:120,d:"Tanaman hias populer dengan daun berlubang yang unik. Cocok untuk indoor dan mudah dirawat.",w:"Siram 1x seminggu, saat tanah atas kering.",t:"Lap daun tiap 2 minggu agar bersih dan mengilap."},
+{id:1,n:"Snake Plant",p:85000,s:"Kecil",sz:"Kecil (< 30 cm)",l:"Cahaya rendah",c:"Mudah",cat:["Indoor","Small","Succulent"],c1:"#6d8a70",r:4.9,rv:210,d:"Tahan banting, tegak, dan membantu menyegarkan ruangan. Pilihan aman untuk pemula.",w:"Siram 2 minggu sekali.",t:"Hindari genangan air di pot."},
+{id:2,n:"Peace Lily",p:110000,s:"Sedang",sz:"Sedang (30–100 cm)",l:"Cahaya sedang",c:"Sedang",cat:["Indoor","Flowering"],c1:"#56795e",r:4.6,rv:86,d:"Berbunga putih elegan dan menyukai ruangan teduh dengan kelembapan cukup.",w:"Siram 2x seminggu, jaga tanah tetap lembap.",t:"Daun layu tandanya butuh air."},
+{id:3,n:"ZZ Plant",p:95000,s:"Sedang",sz:"Sedang (30–100 cm)",l:"Cahaya rendah",c:"Mudah",cat:["Indoor"],c1:"#44674d",r:4.8,rv:142,d:"Daun mengilap, tumbuh lambat, dan sangat tahan kekeringan.",w:"Siram 2–3 minggu sekali.",t:"Aman diletakkan di sudut ruangan minim cahaya."},
+{id:4,n:"Pothos",p:75000,s:"Sedang",sz:"Sedang (30–100 cm)",l:"Cahaya rendah",c:"Mudah",cat:["Indoor","Hanging"],c1:"#7a9a4e",r:4.7,rv:174,d:"Tanaman rambat yang cantik digantung atau diletakkan di rak.",w:"Siram 1x seminggu.",t:"Pangkas ujung sulur agar tumbuh rimbun."},
+{id:5,n:"Aloe Vera",p:60000,s:"Kecil",sz:"Kecil (< 30 cm)",l:"Cahaya terang",c:"Mudah",cat:["Outdoor","Succulent","Herbal","Small"],c1:"#6f9a6a",r:4.5,rv:64,d:"Sukulen berdaun tebal yang bermanfaat untuk perawatan kulit.",w:"Siram 2 minggu sekali.",t:"Letakkan di tempat yang terkena banyak sinar."}];
+var ico={Indoor:"⌂",Outdoor:"☀",Hanging:"⚘",Succulent:"✿",Herbal:"❦",Flowering:"❀",Large:"▲",Small:"●"};
+var L=["Cahaya rendah","Cahaya sedang","Cahaya terang"],Z=["Kecil","Sedang","Besar"],C=["Mudah","Sedang","Sulit"];
+var S={scr:"home",tab:"home",cat:null,q:"",pg:1,sheet:false,id:null,fav:{},cart:0,toast:"",tmp:null,
+ f:{max:500000,min:0,z:[],l:[],c:[]},sort:"asc",prevScr:"home",acc:{}};
+var app=document.getElementById("app");
+function rp(n){return "Rp "+n.toLocaleString("id-ID")}
+function img(p){var c=p.c1,o="";for(var i=0;i<7;i++){var a=-60+i*20+(p.id%3)*4;o+='<ellipse cx="100" cy="95" rx="'+(10+p.id%3*2)+'" ry="'+(40+i%3*8)+'" transform="rotate('+a+' 100 130) translate(0 -22)" fill="'+c+'" opacity="'+(0.7+i%3*0.1)+'"/>'}
+return '<svg viewBox="0 0 200 200" aria-hidden="true">'+o+'<path d="M72 140h56l-7 46H79z" fill="#e9e6df"/><rect x="68" y="134" width="64" height="9" rx="3" fill="#dcd8cf"/></svg>'}
+function match(p){var f=S.f;if(p.p>f.max||p.p<f.min)return 0;
+ if(f.z.length&&!f.z.some(function(z){return p.sz.indexOf(z)==0}))return 0;
+ if(f.l.length&&f.l.indexOf(p.l)<0)return 0;if(f.c.length&&f.c.indexOf(p.c)<0)return 0;
+ if(S.cat&&p.cat.indexOf(S.cat)<0)return 0;
+ if(S.q&&(p.n+p.cat.join(" ")+p.l).toLowerCase().indexOf(S.q.toLowerCase())<0)return 0;return 1}
+function list(){var a=P.filter(match);if(S.sort=="asc")a.sort(function(x,y){return x.p-y.p});else if(S.sort=="desc")a.sort(function(x,y){return y.p-x.p});else a.sort(function(x,y){return y.rv-x.rv});return a}
+function nav(s,o){S.prevScr=S.scr;S.scr=s;if(o)for(var k in o)S[k]=o[k];render()}
+function tab(t){S.tab=t;S.scr=t=="cat"?"cat":t=="fav"?"fav":t=="acc"?"acc":"home";S.cat=null;S.q="";render()}
+function toast(m){S.toast=m;render();setTimeout(function(){S.toast="";render()},1600)}
+function heart(p){return '<span class="heart" role="button" aria-label="Favorit" onclick="event.stopPropagation();S.fav['+p.id+']=!S.fav['+p.id+'];render()">'+(S.fav[p.id]?"♥":"♡")+'</span>'}
+function meta(p){return '<div class="m"><i>↕</i>'+p.s+'</div><div class="m"><i>☼</i>'+p.l+'</div><div class="m"><i>❦</i>'+p.c+'</div>'}
+function pcard(p){return '<div class="card" role="button" tabindex="0" onclick="nav(\'detail\',{id:'+p.id+'})">'+heart(p)+'<div class="im">'+img(p)+'</div><div class="tx"><b>'+p.n+'</b><span class="pr">'+rp(p.p)+'</span>'+meta(p)+'</div></div>'}
+function topbar(title,back,right){return '<div class="bar">'+(back?'<button class="ic" aria-label="Kembali" onclick="back()">←</button>':'<span style="color:var(--g);font-size:20px">❦</span>')+'<span>'+title+'</span><span class="sp"></span>'+(right||'<button class="ic" aria-label="Cari" onclick="nav(\'list\')">⌕</button><button class="ic" aria-label="Favorit" onclick="tab(\'fav\')">♡</button><button class="ic" onclick="tab(\'acc\')" aria-label="Akun">☺</button>')+'</div>'}
+function back(){S.scr=S.prevScr&&S.prevScr!="detail"?S.prevScr:"home";if(S.scr=="list"&&S.prevScr=="detail")S.scr="list";render()}
+function tabs(){var t=[["home","⌂","Home"],["cat","▦","Kategori"],["fav","♡","Favorit"],["acc","☺","Akun"]];return '<nav class="tabs">'+t.map(function(x){return '<button class="'+(S.tab==x[0]?"on":"")+'" onclick="tab(\''+x[0]+'\')"><span>'+x[1]+'</span>'+x[2]+'</button>'}).join("")+'</nav>'}
+function catGrid(){return '<div class="cats">'+Object.keys(ico).map(function(k){return '<button class="cat" onclick="nav(\'list\',{cat:\''+k+'\',pg:1})"><span>'+ico[k]+'</span>'+k+'</button>'}).join("")+'</div>'}
+function searchBox(){return '<label class="search"><span>⌕</span><input id="q" placeholder="Cari tanaman, jenis, atau kebutuhan..." value="'+S.q+'" onkeydown="if(event.key==\'Enter\'){S.q=this.value;S.pg=1;nav(\'list\')}"></label>'}
+function home(){return topbar("Greeny")+'<div id="main"><div class="hero"><div><h1>Bring More Green Into Your Life</h1><p>Temukan tanaman yang tepat untuk rumah dan gayamu.</p></div><div style="width:120px;flex:none;height:120px">'+img(P[0])+'</div></div>'+searchBox()+
+'<div class="sec"><h2>Kategori</h2><a onclick="nav(\'cat\')">Lihat semua →</a></div>'+catGrid()+
+'<div class="sec"><h2>Rekomendasi untuk Kamu</h2><a onclick="nav(\'rec\')">Lihat semua →</a></div><div class="row">'+P.slice(0,3).map(function(p){return '<button class="mini" onclick="nav(\'detail\',{id:'+p.id+'})"><div class="im">'+img(p)+'</div><div><b>'+p.n+'</b><br>'+rp(p.p)+'</div></button>'}).join("")+'</div></div>'}
+function listScr(){var a=list(),per=4,n=Math.max(1,Math.ceil(a.length/per));if(S.pg>n)S.pg=1;var v=a.slice((S.pg-1)*per,S.pg*per),ch=[];
+ var f=S.f;if(f.max<500000||f.min>0)ch.push("Harga: "+rp(f.min).replace("Rp ","Rp ")+" – "+rp(f.max));f.z.concat(f.l,f.c).forEach(function(x){ch.push(x)});if(S.cat)ch.push(S.cat);if(S.q)ch.push("“"+S.q+"”");
+ var pg='';for(var i=1;i<=n;i++)pg+='<button class="'+(i==S.pg?"on":"")+'" onclick="S.pg='+i+';render()">'+i+'</button>';
+ return topbar("Tanaman",1,'<button class="ic" onclick="nav(\'home\')" aria-label="Cari">⌕</button>')+'<div id="main"><div class="fs"><button onclick="openSheet()">☰ Filter</button><button onclick="openSheet()">⇅ Urutkan</button></div><div class="chips">'+ch.map(function(c){return '<span class="chip">'+c+'</span>'}).join("")+(ch.length?'<button class="link" onclick="S.f={max:500000,min:0,z:[],l:[],c:[]};S.cat=null;S.q=\'\';render()">Hapus semua</button>':'')+'</div>'+
+ (v.length?'<div class="grid">'+v.map(pcard).join("")+'</div><div class="pg"><button onclick="S.pg=Math.max(1,S.pg-1);render()" aria-label="Sebelumnya">←</button>'+pg+'<button onclick="S.pg=Math.min('+n+',S.pg+1);render()" aria-label="Berikutnya">→</button></div>':'<div class="empty">Tidak ada tanaman yang cocok.<br>Coba ubah atau hapus filter.</div>')+'</div>'}
+function openSheet(){S.tmp=JSON.parse(JSON.stringify({f:S.f,sort:S.sort}));S.sheet=true;render()}
+function tg(k,v){var a=S.tmp.f[k],i=a.indexOf(v);i<0?a.push(v):a.splice(i,1)}
+function group(t,k,o){return '<h4>'+t+'</h4>'+o.map(function(x){return '<label><input type="checkbox" '+(S.tmp.f[k].indexOf(x)>=0?"checked":"")+' onchange="tg(\''+k+'\',\''+x+'\')">'+x+(k=="z"?({Kecil:" (< 30 cm)",Sedang:" (30–100 cm)",Besar:" (≥ 100 cm)"})[x]:"")+'</label>'}).join("")}
+function sheet(){var t=S.tmp;return '<div class="sheet"><div role="dialog" aria-label="Filter"><h3>Filter <button onclick="S.sheet=false;render()" aria-label="Tutup">✕</button></h3><h4>Harga: '+rp(t.f.max)+(t.f.max>=500000?"+":"")+'</h4><input type="range" min="0" max="500000" step="10000" value="'+t.f.max+'" aria-label="Harga maksimum" oninput="S.tmp.f.max=+this.value;this.previousElementSibling.textContent=\'Harga: \'+rp(+this.value)+(+this.value>=500000?\'+\':\'\')">'+
+ group("Ukuran","z",Z)+group("Kebutuhan Cahaya","l",L)+group("Tingkat Perawatan","c",C)+'<h4>Urutkan berdasarkan</h4>'+[["asc","Harga (terendah–tertinggi)"],["desc","Harga (tertinggi–terendah)"],["pop","Popularitas"]].map(function(x){return '<label><input type="radio" name="s" '+(t.sort==x[0]?"checked":"")+' onchange="S.tmp.sort=\''+x[0]+'\'">'+x[1]+'</label>'}).join("")+
+ '<div style="display:flex;gap:10px;margin-top:18px"><button class="btn" style="background:var(--gl);color:var(--ink)" onclick="S.tmp.f={max:500000,min:0,z:[],l:[],c:[]};render()">Atur ulang</button><button class="btn" onclick="S.f=S.tmp.f;S.sort=S.tmp.sort;S.sheet=false;S.pg=1;render()">Terapkan</button></div></div></div>'}
+function catScr(){return topbar("Kategori")+'<div id="main">'+searchBox()+catGrid()+'</div>'}
+function rec(){var r=[P[3],P[2],P[4]];return topbar("Greeny",0)+'<div id="main"><h2 style="font-size:20px;margin-top:4px">Rekomendasi untuk Kamu</h2><p style="font-size:12px;color:var(--mute)">Berdasarkan preferensi dan kondisi lingkunganmu</p><div class="pref"><span style="font-size:26px;color:var(--g)">❦</span><div><p>Kamu menyukai tanaman Indoor dengan perawatan mudah dan cahaya sedang.</p><button class="btn sm" onclick="S.f={max:500000,min:0,z:[],l:[\'Cahaya sedang\'],c:[\'Mudah\']};S.cat=\'Indoor\';nav(\'list\',{pg:1})">Ubah Preferensi</button></div></div><div class="sec"><h2>Pilihan Terbaik untuk Kamu</h2></div>'+
+ r.map(function(p){return '<button class="rec" onclick="nav(\'detail\',{id:'+p.id+'})"><div class="im">'+img(p)+'</div><div><b>'+p.n+'</b><span class="pr" style="margin:0">'+rp(p.p)+'</span>'+meta(p)+'</div><span style="color:var(--mute)">›</span></button>'}).join("")+'</div>'}
+function fav(){var a=P.filter(function(p){return S.fav[p.id]});return topbar("Favorit")+'<div id="main">'+(a.length?'<div class="grid">'+a.map(pcard).join("")+'</div>':'<div class="empty">Belum ada favorit.<br>Ketuk ♡ pada tanaman untuk menyimpannya.</div>')+'</div>'}
+function accScr(){return topbar("Akun")+'<div id="main"><div class="pref"><div><b>Keranjang</b><p style="margin:4px 0 0">'+S.cart+' tanaman</p></div></div><button class="btn" onclick="var r=document.documentElement;r.dataset.theme=r.dataset.theme==\'dark\'?\'light\':\'dark\'">Ganti tema</button></div>'}
+function detail(){var p=P[S.id],o=[["Deskripsi",p.d],["Kebutuhan Cahaya",p.l+". Letakkan dekat jendela dengan cahaya tidak langsung."],["Frekuensi Penyiraman",p.w],["Tips Perawatan",p.t],["Tersedia di","Toko Greeny Surabaya, Sidoarjo, dan pengiriman seluruh Indonesia."]];
+ return topbar("Tanaman",1,'')+'<div id="main"><div class="d-im im">'+heart(p)+img(p)+'</div><div class="sec" style="margin-bottom:2px"><h2 style="font-size:19px">'+p.n+'</h2></div><b style="font-size:16px">'+rp(p.p)+'</b><div class="m">★ '+p.r+' ('+p.rv+' ulasan)</div>'+
+ '<div class="stats"><div>Ukuran<b>'+p.s+'</b></div><div>Cahaya<b>'+p.l.replace("Cahaya ","")+'</b></div><div>Perawatan<b>'+p.c+'</b></div></div><button class="btn" onclick="S.cart++;toast(\'Ditambahkan ke keranjang\')">Tambah ke Keranjang</button>'+
+ '<div class="acc">'+o.map(function(x,i){return '<button onclick="S.acc['+i+']=!S.acc['+i+'];render()">'+x[0]+'<span>'+(S.acc[i]?"⌃":"⌄")+'</span></button>'+(S.acc[i]?'<div><p style="padding-top:10px">'+x[1]+'</p></div>':'')}).join("")+'</div></div>'}
+function render(){var m={home:home,list:listScr,cat:catScr,rec:rec,fav:fav,acc:accScr,detail:detail};var q=document.getElementById("q"),keep=q&&document.activeElement==q;
+ app.innerHTML=m[S.scr]()+tabs()+(S.sheet?sheet():"")+(S.toast?'<div class="toast" role="status">'+S.toast+'</div>':"");
+ if(keep){var n=document.getElementById("q");n.focus()}}
+render();
+</script>
+</body>
+</html>
